@@ -1,9 +1,0 @@
-pydantic
-ipython
-fastapi
-uvicorn
-litecli
-jinja2
-sqlmodel
-sqladmin
-httpie
