@@ -1,9 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.sites.shortcuts import get_current_site
 from .forms import SignUpForm, LoginForm
-from users.models import User  # Import your custom User model
+from .models import User, EmailVerificationToken
+from .tokens import email_verification_token
 from django.contrib.auth import login, authenticate, logout
-
+from django.contrib import messages
+import secrets
+from pokedex.settings import DEFAULT_FROM_EMAIL
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponseBadRequest
+from django.utils.encoding import force_str, force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.mail import EmailMessage
 
 def signup(request):
     if request.method == 'POST':
@@ -12,8 +21,28 @@ def signup(request):
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            User.objects.create_user(username=username, email=email, password=password)
-            return HttpResponse('User created successfully!')
+            
+
+            if User.objects.filter(username=username).exists():
+                messages.error(request, "Username already exists! Please try a different username.")
+                return redirect('/')
+            
+            if User.objects.filter(email=email).exists():
+                messages.error(request, "Email already registered!")
+                return redirect('/')
+            
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.is_active = False
+        
+            verification_token = email_verification_token.make_token(user)
+            EmailVerificationToken.objects.create(user=user, token=verification_token)
+            verification_link = f'127.0.0.1:8000/auth/emailverification/{urlsafe_base64_encode(force_bytes(user.pk))}/{verification_token}'
+            
+            subject = "Please verify your email address..."
+            message = f"Hello {user.username},\n\nPlease click on the link below to verify your email address:\n\n{verification_link}"
+            email = EmailMessage(subject, message, to=[email])
+            email.send()
+
     else:
         form = SignUpForm()
     return render(request, 'signup.tpl.html', {'form': form})
@@ -37,3 +66,21 @@ def signin(request):
 def signout(request):
     logout(request)
     return redirect("/")
+
+
+def email_verification(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        token_obj = EmailVerificationToken.objects.get(user=user)
+    except (User.DoesNotExist, EmailVerificationToken.DoesNotExist):
+        user = None
+        token_obj = None
+
+    if user is not None and token_obj is not None and token_obj.token == token:
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('/')
+    else:
+        return HttpResponseBadRequest('Activation link is invalid!')
