@@ -25,11 +25,13 @@ def signup(request):
 
             if User.objects.filter(username=username).exists():
                 messages.error(request, "Username already exists! Please try a different username.")
-                return redirect('/')
+                mistake = "Username already exists! Please try a different username."
+                return render(request, "auth/signupbad.tpl.html", context={'mistake': mistake})
             
             if User.objects.filter(email=email).exists():
                 messages.error(request, "Email already registered!")
-                return redirect('/')
+                mistake = "Email already registered!"
+                return render(request, "auth/signupbad.tpl.html", context={'mistake': mistake})
             
             user = User.objects.create_user(username=username, email=email, password=password)
             user.is_active = False
@@ -58,7 +60,8 @@ def signin(request):
                 login(request, user)
                 return redirect('/')
             else:
-                return render(request, 'login.tpl.html', {'form': form, 'error': 'Invalid login'})
+                mistake = "Invalid username or password"
+                return render(request, 'auth/signupbad.tpl.html', {'mistake': mistake})
     else:
         form = LoginForm()
     return render(request, 'login.tpl.html', {'form': form})
