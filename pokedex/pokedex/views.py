@@ -5,8 +5,13 @@ def home(request):
         'links': [
         { 'title': 'Home', 'url': '/'},
         { 'title': 'Pokémons', 'url': '/pokedex'},
-        { 'title': 'Admin', 'url': '/admin', 'target': '_new'},
-        { 'title': 'Sign Up', 'url': '/auth/signup', 'target': '_new'},
+        { 'title': 'Sign in', 'url': '/auth/signin'},
+        { 'title': 'Sign Up', 'url': '/auth/signup'},
         ]
     }
+
+    if request.user.is_authenticated:
+        links['links'].pop()
+        links['links'].append({ 'title': 'Logout', 'url': '/auth/signout'})
+
     return render(request, "home.tpl.html", context=links)
