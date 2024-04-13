@@ -12,6 +12,8 @@ def home(request):
 
     if request.user.is_authenticated:
         links['links'].pop()
+        links['links'].pop()
         links['links'].append({ 'title': 'Logout', 'url': '/auth/signout'})
+        links['links'].append({ 'title': 'Profile', 'url': '/id/'})
 
     return render(request, "home.tpl.html", context=links)

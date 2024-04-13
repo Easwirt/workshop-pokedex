@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
-from .models import User, EmailVerificationToken
+from .models import User, EmailVerificationToken, Profile
 from .tokens import email_verification_token
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -83,3 +83,8 @@ def email_verification(request, uidb64, token):
     else:
         message = "Invalid token!"
         return render(request, 'auth/emailverified.tpl.html', {'message' : message})
+
+
+def profile_view(request):
+    profile = request.user.profile
+    return render(request, 'profile.tpl.html', {'profile': profile})
