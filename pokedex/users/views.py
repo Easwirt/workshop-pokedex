@@ -1,15 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.contrib.sites.shortcuts import get_current_site
 from .forms import SignUpForm, LoginForm
 from .models import User, EmailVerificationToken
 from .tokens import email_verification_token
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-import secrets
-from pokedex.settings import DEFAULT_FROM_EMAIL
-from django.contrib.auth.tokens import default_token_generator
-from django.http import HttpResponseBadRequest
 from django.utils.encoding import force_str, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage
@@ -84,6 +78,8 @@ def email_verification(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return redirect('/')
+        message = "Your email has been verified."
+        return render(request, 'auth/emailverified.tpl.html', {'message' : message})
     else:
-        return HttpResponseBadRequest('Activation link is invalid!')
+        message = "Invalid token!"
+        return render(request, 'auth/emailverified.tpl.html', {'message' : message})

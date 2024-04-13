@@ -1,0 +1,83 @@
+{% extends "base.tpl.html" %}
+
+{% block content %}
+<div class="d-flex flex-center flex-column align-items-center justify-content-center" style="height: 100vh;">
+    <style>*,
+        *::before,
+        *::after {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        button {
+          appearance: none;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          isolation: isolate;
+          text-decoration: none;
+        }
+        
+        .button {
+          color: #121212;
+          font-size: 16px;
+          line-height: 1.5;
+          font-weight: 500;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 4px;
+          outline: 2px solid transparent;
+          outline-offset: 4px;
+          position: relative;
+          text-decoration: none;
+          
+          &:focus-visible {
+            outline-color: #1212df;
+          }
+          
+          &::before {
+            content: '';
+            z-index: -1;
+            border-radius: inherit;
+            background: #121212;
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 200ms ease;
+          }
+          
+          &:hover::before {
+            transition: opacity 100ms ease;
+            opacity: 1;
+          }
+          &:active::before {
+            transition: opacity 100ms ease;
+            opacity: 0;
+          }
+          
+          & > .front {
+            padding: 12px 96px;
+            border-radius: inherit;
+            background: #ffffff;
+            transition: transform 200ms ease;
+          }
+          
+          &:hover > .front {
+            transform: translate(-8px, -8px);
+          }
+          &:active > .front {
+            transition: transform 50ms ease;
+            transform: translate(0px, 0px);
+          }
+        }
+    </style>
+    <h2>{{ message }}</h2>
+    <a href="/" class="button">
+        <div class="front">
+          <span>Click to continue</span>
+        </div>
+    </a>
+</div>
+{% endblock content %}
