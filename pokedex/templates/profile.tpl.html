@@ -1,8 +1,15 @@
 {% extends "base.tpl.html" %}
-
+{% load static %}
 
 {% block content %}
 
-<p>Username: {{ profile.user.username }}</p>
+<div class="profile">
+    <p>{{ profile.user.username }}</p>
+    {% if profile.avatar %}
+    <img src="{{ profile.avatar.url }}" alt="Avatar">
+    {% else %}
+    <img src="{% static 'avatars/default.png' %}" alt="Default Avatar">
+    {% endif %}
+</div>
 
 {% endblock content %}
