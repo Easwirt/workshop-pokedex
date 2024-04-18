@@ -30,11 +30,16 @@
 }
 
 .avatar-options{
-  margin: 100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+
 }
 
 img{
   border-radius: 50%;
+  margin-bottom: 50px;
 }
 
 /* Close button */
