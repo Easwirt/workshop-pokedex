@@ -38,10 +38,10 @@ def signup(request):
             message = f"Hello {user.username},\n\nPlease click on the link below to verify your email address:\n\n{verification_link}"
             email = EmailMessage(subject, message, to=[email])
             email.send()
-            return render(request, 'emailverified.tpl.html', {'message' : "Please check your email for verification."})
+            return render(request, 'auth/emailverified.tpl.html', {'message' : "Please check your email for verification."})
     else:
         form = SignUpForm()
-    return render(request, 'signup.tpl.html', {'form': form})
+    return render(request, 'auth/signup.tpl.html', {'form': form})
 
 def signin(request):
     if request.method == 'POST':
@@ -58,7 +58,7 @@ def signin(request):
                 return render(request, 'auth/signupbad.tpl.html', {'mistake': mistake})
     else:
         form = LoginForm()
-    return render(request, 'login.tpl.html', {'form': form})
+    return render(request, 'auth/login.tpl.html', {'form': form})
 
 def signout(request):
     logout(request)
@@ -79,13 +79,15 @@ def email_verification(request, uidb64, token):
         user.email_confirmed = True
         user.save()
         login(request, user)
+        token_obj.delete()
         message = "Your email has been verified."
         return render(request, 'auth/emailverified.tpl.html', {'message' : message})
     else:
         message = "Invalid token!"
+        token_obj.delete()
         return render(request, 'auth/emailverified.tpl.html', {'message' : message})
 
 
 def profile_view(request):
     profile = request.user.profile
-    return render(request, 'profile.tpl.html', {'profile': profile})
+    return render(request, 'auth/profile.tpl.html', {'profile': profile})

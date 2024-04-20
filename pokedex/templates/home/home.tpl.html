@@ -1,5 +1,5 @@
-{% extends "base.tpl.html" %}
-
+{% extends "home/base.tpl.html" %}
+{% load static %}
 {% block content %}
 <div class="container text-center">
 
@@ -16,7 +16,7 @@
 
       <div class="carousel-item active">
         <a href="http://www.namakanyden.sk/">
-          <img src="/static/images/banner-namakany.den.png" class="d-block w-100" alt="Namakaný deň Logo">
+          <img src="{% static 'images/banner-namakany.den.png' %}" class="d-block w-100" alt="Namakaný deň Logo">
         </a>
         <div class="carousel-caption d-none d-md-block" style="color: black">
           <p>
@@ -27,7 +27,7 @@
 
       <div class="carousel-item">
         <a href="https://www.djangoproject.com/">
-          <img src="/static/images/banner-django.png" class="d-block w-100" alt="Django Logo">
+          <img src="{% static '/images/banner-django.png' %}" class="d-block w-100" alt="Django Logo">
         </a>
         <div class="carousel-caption d-none d-md-block" style="color: black">
           <p>
@@ -39,7 +39,7 @@
 
       <div class="carousel-item">
         <a href="https://sqlmodel.tiangolo.com/">
-          <img src="/static/images/banner-sqlmodel.png" class="d-block w-100" alt="SQLModel">
+          <img src="{% static 'images/banner-sqlmodel.png' %}" class="d-block w-100" alt="SQLModel">
         </a>
         <div class="carousel-caption d-none d-md-block" style="color: black">
           <p>
@@ -51,7 +51,7 @@
 
       <div class="carousel-item">
         <a href="https://www.pokemon.com/us/pokedex/">
-          <img src="/static/images/banner-pokedex.png" class="d-block w-100" alt="Pokédex">
+          <img src="{% static 'images/banner-pokedex.png' %}" class="d-block w-100" alt="Pokédex">
         </a>
         <div class="carousel-caption d-none d-md-block">
           <p>
@@ -77,7 +77,7 @@
   <div class="d-flex justify-content-center">
     <div>
       <h4>Find Pokémon by it's name or number:</h4>
-      {% include "searchbar.tpl.html" %}
+      {% include "home/searchbar.tpl.html" %}
     </div>
   </div>
 

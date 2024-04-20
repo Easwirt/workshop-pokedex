@@ -9,4 +9,5 @@ urlpatterns = [
     path('', home, name="home-page"),
     path('auth/', include('users.urls')),
     path('id/', profile_view, name='profile'),
+    path('pokemons/', include('pokemons.urls')),
 ]

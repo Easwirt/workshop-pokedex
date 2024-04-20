@@ -19,6 +19,9 @@ class Profile(models.Model):
     avatar = models.IntegerField(default=0)
     coins = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.user.username
+
 @receiver(post_save, sender=User)
 def createprofile(sender, instance, created, **kwargs):
     if created and not instance.is_superuser:

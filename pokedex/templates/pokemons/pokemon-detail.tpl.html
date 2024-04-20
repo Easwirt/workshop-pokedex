@@ -1,4 +1,4 @@
-{% extends "base.tpl.html" %}
+{% extends "home/base.tpl.html" %}
 
 {% block content %}
 <div class="container text-center">
@@ -6,8 +6,7 @@
 
     <div class="row justify-content-start">
         <div class="col-6">
-            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/{{ "%03d" | format(pokemon.pokedex_number) }}.png" 
-                title="{{ pokemon.name }}" alt="{{ pokemon.name }}" class="text-bg-light"/>
+            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/{{ pokemon.pokedex_number|stringformat:"03d" }}.png" title="{{ pokemon.name }}" alt="{{ pokemon.name }}" class="text-bg-light"/>
         </div>
 
         <div class="col-6">
@@ -29,8 +28,8 @@
 
                         <div class="mb-6">
                             <b>Abilities</b><br/>
-                            {% for a in pokemon.abilities %}
-                                {{ a }}
+                            {% for ability in pokemon.abilities %}
+                                {{ ability }}
                             {% endfor %}
                         </div>
                     </div>
