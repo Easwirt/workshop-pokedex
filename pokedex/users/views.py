@@ -38,7 +38,7 @@ def signup(request):
             message = f"Hello {user.username},\n\nPlease click on the link below to verify your email address:\n\n{verification_link}"
             email = EmailMessage(subject, message, to=[email])
             email.send()
-
+            return render(request, 'emailverified.tpl.html', {'message' : "Please check your email for verification."})
     else:
         form = SignUpForm()
     return render(request, 'signup.tpl.html', {'form': form})
@@ -76,6 +76,7 @@ def email_verification(request, uidb64, token):
 
     if user is not None and token_obj is not None and token_obj.token == token:
         user.is_active = True
+        user.email_confirmed = True
         user.save()
         login(request, user)
         message = "Your email has been verified."

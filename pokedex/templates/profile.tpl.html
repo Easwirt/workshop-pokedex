@@ -2,14 +2,24 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/profilestyle.css' %}">
+<div class="profile-container">
+        <button class="change-profile-btn">Edit profile</button>
+        <p class="profile-username">{{ profile.user.username }}</p>
+        <div class="avatar-coins-wrapper">
+        <div class="avatar-wrapper">
+            <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" alt="Avatar" class="profile-avatar">
+        </div>
+        <div class="coins-wrapper">
+            <p class="coins-value">{{ profile.coins }}</p>
+            <img src="{% static 'images/coin.png' %}" alt="Coin" class="coin-icon">
+        </div>
+        </div>
 
-<div class="profile">
-    <p>{{ profile.user.username }}</p>
-    {% if profile.avatar %}
-    <img src="{{ profile.avatar.url }}" alt="Avatar">
-    {% else %}
-    <img src="{% static 'avatars/default.png' %}" alt="Default Avatar">
-    {% endif %}
+        {% if profile.bio %}
+            <p class="profile-bio">{{ profile.bio }}</p>
+        {% endif %}
+
 </div>
 
 {% endblock content %}

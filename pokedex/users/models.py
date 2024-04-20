@@ -16,7 +16,8 @@ class EmailVerificationToken(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=300)
-    avatar = models.ImageField(null=True, blank=True, default='avatars/default.png')
+    avatar = models.IntegerField(default=0)
+    coins = models.IntegerField(default=0)
 
 @receiver(post_save, sender=User)
 def createprofile(sender, instance, created, **kwargs):

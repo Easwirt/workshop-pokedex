@@ -1,0 +1,100 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+
+  
+  .profile-username {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .profile-bio {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .avatar-coins-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  .coins-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  .coins-value {
+    margin-bottom: 5px;
+  }
+  
+  .coin-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  
+  .change-profile-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .profile-form {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .profile-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .profile-form button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .profile-form form {
+    margin: 0;
+  }
+
+  .change-profile-btn {
+  position: absolute;
+  top: 120px;
+  right: 120px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
