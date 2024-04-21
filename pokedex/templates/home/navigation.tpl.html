@@ -12,6 +12,11 @@
             <a class="nav-link" href="{{ link.url }}" target="{{ link.target }}">{{ link.title }}</a>
           </li>
           {% endfor %}
+          {% if request.path == '/auth/signup/' %}
+            <a class="nav-link" href="/auth/signin/"> Sign In</a>
+          {% elif request.path == '/auth/signin/' %}
+            <a class="nav-link" href="/auth/signup/"> Sign Up</a>
+          {% endif %}
 
         </ul>
         {% include "home/searchbar.tpl.html" %}

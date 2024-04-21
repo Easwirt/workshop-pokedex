@@ -3,7 +3,6 @@ from django.shortcuts import render
 def home(request):
     links = {
         'links': [
-        { 'title': 'Home', 'url': '/'},
         { 'title': 'Sign in', 'url': '/auth/signin'},
         { 'title': 'Sign Up', 'url': '/auth/signup'},
         ]
