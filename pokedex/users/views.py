@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.utils.encoding import force_str, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage
+from django.contrib.auth.decorators import login_required
 
 def signup(request):
     if request.method == 'POST':
@@ -18,14 +19,15 @@ def signup(request):
             
 
             if User.objects.filter(username=username).exists():
-                messages.error(request, "Username already exists! Please try a different username.")
-                mistake = "Username already exists! Please try a different username."
-                return render(request, "auth/signupbad.tpl.html", context={'mistake': mistake})
+                message = "Username already exists! Please try a different username."
+                messages.error(request, message)
+                return render(request, "auth/signup.tpl.html", {'form': form, 'error_message': message})
+
             
             if User.objects.filter(email=email).exists():
-                messages.error(request, "Email already registered!")
-                mistake = "Email already registered!"
-                return render(request, "auth/signupbad.tpl.html", context={'mistake': mistake})
+                message = "Email already registered!"
+                messages.error(request, message)
+                return render(request, "auth/signup.tpl.html", {'form': form, 'error_message': message})
             
             user = User.objects.create_user(username=username, email=email, password=password)
             user.is_active = False
@@ -38,7 +40,10 @@ def signup(request):
             message = f"Hello {user.username},\n\nPlease click on the link below to verify your email address:\n\n{verification_link}"
             email = EmailMessage(subject, message, to=[email])
             email.send()
-            return render(request, 'auth/emailverified.tpl.html', {'message' : "Please check your email for verification."})
+            message = "Please check your email for verification mail."
+            success_message = "Please check your email for verification."
+            messages.success(request, success_message)
+            return render(request, 'auth/signup.tpl.html', {'form': form, 'success_message' : success_message})
     else:
         form = SignUpForm()
     return render(request, 'auth/signup.tpl.html', {'form': form})
@@ -54,8 +59,8 @@ def signin(request):
                 login(request, user)
                 return redirect('/')
             else:
-                mistake = "Invalid username or password"
-                return render(request, 'auth/signupbad.tpl.html', {'mistake': mistake})
+                message = "Invalid username or password"
+                return render(request, 'auth/login.tpl.html', {'form': form, 'error_message': message})
     else:
         form = LoginForm()
     return render(request, 'auth/login.tpl.html', {'form': form})
@@ -88,6 +93,8 @@ def email_verification(request, uidb64, token):
         return render(request, 'auth/emailverified.tpl.html', {'message' : message})
 
 
+
+@login_required(login_url='/auth/signin/')
 def profile_view(request):
     profile = request.user.profile
     return render(request, 'auth/profile.tpl.html', {'profile': profile})
