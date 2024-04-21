@@ -4,7 +4,6 @@ def home(request):
     links = {
         'links': [
         { 'title': 'Home', 'url': '/'},
-        { 'title': 'Pokémons', 'url': '/pokemons'},
         { 'title': 'Sign in', 'url': '/auth/signin'},
         { 'title': 'Sign Up', 'url': '/auth/signup'},
         ]
@@ -13,6 +12,7 @@ def home(request):
     if request.user.is_authenticated:
         links['links'].pop()
         links['links'].pop()
+        links['links'].append({ 'title': 'Pokémons', 'url': '/pokemons'})
         links['links'].append({ 'title': 'Logout', 'url': '/auth/signout'})
         links['links'].append({ 'title': 'Profile', 'url': '/id/'})
 
