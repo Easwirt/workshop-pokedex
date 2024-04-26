@@ -1,0 +1,9 @@
+{% if request.path == '/auth/signup/' %}
+    <li class="nav-item">
+        <a class="nav-link" href="/auth/signin/">Sign In</a>
+    </li>
+{% elif request.path == '/auth/signin/' %}
+    <li class="nav-item">
+        <a class="nav-link" href="/auth/signup/">Sign Up</a>
+    </li>
+{% endif %}

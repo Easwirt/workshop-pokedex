@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name="home-page"),
     path('auth/', include('users.urls')),
-    path('id/', profile_view, name='profile'),
+    path('profile/', profile_view, name='my-profile'),
+    path('profile/<str:username>/', profile_view, name='user-profile'),
     path('pokemons/', include('pokemons.urls')),
 ]

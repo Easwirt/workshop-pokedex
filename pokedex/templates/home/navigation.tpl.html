@@ -6,18 +6,13 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-          {% for link in links %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ link.url }}" target="{{ link.target }}">{{ link.title }}</a>
-          </li>
-          {% endfor %}
-          {% if request.path == '/auth/signup/' %}
-            <a class="nav-link" href="/auth/signin/">Sign In</a>
-          {% elif request.path == '/auth/signin/' %}
-            <a class="nav-link" href="/auth/signup/">Sign Up</a>
+          {% if request.path == '/' %}
+            {% include 'links/links.home.html' %}
+          {% elif request.path == '/auth/signup/' or request.path == '/auth/signin/' %}
+            {% include 'links/links.sign.html' %}
+          {% elif request.path == '/profile/'%}
+            {% include 'links/links.profile.html' %}
           {% endif %}
-
         </ul>
         {% include "home/searchbar.tpl.html" %}
       </div>

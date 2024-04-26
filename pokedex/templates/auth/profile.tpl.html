@@ -23,11 +23,13 @@
                     {% if profile.bio %}
                     <p class="card-text text-center">{{ profile.bio }}</p>
                     {% endif %}
-                </div>                
-                <div class="card-footer text-muted d-flex justify-content-between">
-                    <button class="btn btn-primary">Edit Profile</button>
-                    <button class="btn btn-primary">Change Avatar</button>
-                </div>                
+                </div>
+                {% if change_permission %}
+                    <div class="card-footer text-muted d-flex justify-content-between">
+                        <button class="btn btn-primary">Edit Profile</button>
+                        <button class="btn btn-primary">Change Avatar</button>
+                    </div>                
+                {% endif %}                
             </div>
         </div>
     </div>
