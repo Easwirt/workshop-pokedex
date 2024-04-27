@@ -1,6 +1,9 @@
 {% extends "home/base.tpl.html" %}
 {% load static %}
 
+{% block title %} {{ profile.user.username }} {% endblock title %}
+
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/profilestyle.css' %}">
 <div class="container-fluid mt-2">
@@ -21,7 +24,7 @@
                         </div>
                     </div>
                     {% if profile.bio %}
-                    <p class="card-text text-center">{{ profile.bio }}</p>
+                    <h3 class="card-text text-center">{{ profile.bio }}</h3>
                     {% endif %}
                 </div>
                 {% if change_permission %}

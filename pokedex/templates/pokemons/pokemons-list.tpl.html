@@ -1,4 +1,8 @@
- {% extends "home/base.tpl.html" %}
+{% extends "home/base.tpl.html" %}
+
+
+{% block title %} Pokemons {% endblock title %}
+
 
 {% block content %}
 <div class="container text-center">
@@ -74,7 +78,7 @@
             
         {% else %}
             <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
-                <h2>{{ error_message }}</h2>
+                <h2>{{ error_message|safe }}</h2>
             </div>
         {% endif %}
     </div>

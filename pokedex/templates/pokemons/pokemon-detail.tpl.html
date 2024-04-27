@@ -1,5 +1,9 @@
 {% extends "home/base.tpl.html" %}
 
+
+{% block title %} {{ pokemon.name }} {% endblock title %}
+
+
 {% block content %}
 <div class="container text-center">
     <h1>{{ pokemon.name }} #{{ pokemon.pokedex_number }}</h1>
