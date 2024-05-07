@@ -3,7 +3,6 @@
 
 {% block title %} {{ profile.user.username }} {% endblock title %}
 
-
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/profilestyle.css' %}">
 <div class="container-fluid mt-2">
@@ -30,12 +29,25 @@
                 {% if change_permission %}
                     <div class="card-footer text-muted d-flex justify-content-between">
                         <button class="btn btn-primary">Edit Profile</button>
-                        <button class="btn btn-primary">Change Avatar</button>
-                    </div>                
+                        <button id="openModalBtn" class="btn btn-primary">Change Avatar</button>
+                    </div>       
                 {% endif %}                
             </div>
         </div>
     </div>
 </div>
-
+<div id="avatarModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-body">
+            <h2>Select Your Avatar</h2>
+            <div class="avatar-options">
+                {% for i in 'x'|rjust:10 %}
+                 <img src="{% static 'avatars/' %}{{ forloop.counter0 }}.png" alt="{{ forloop.counter0 }}" class="avatar" data-avatar="{{ forloop.counter0 }}">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/changeavatarprofile.js'%}"></script> 
 {% endblock content %}

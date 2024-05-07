@@ -9,6 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage
 from django.contrib.auth.decorators import login_required
 from django.template.response import TemplateResponse
+from pokedex.settings import DEFAULT_URL
 
 def signup(request):
     if request.method == 'POST':
@@ -39,7 +40,7 @@ def signup(request):
         
             verification_token = email_verification_token.make_token(user)
             EmailVerificationToken.objects.create(user=user, token=verification_token)
-            verification_link = f'127.0.0.1:8000/auth/emailverification/{urlsafe_base64_encode(force_bytes(user.pk))}/{verification_token}'
+            verification_link = f'{DEFAULT_URL}/auth/emailverification/{urlsafe_base64_encode(force_bytes(user.pk))}/{verification_token}'
             
             subject = "Please verify your email address..."
             message = f"Hello {user.username},\n\nPlease click on the link below to verify your email address:\n\n{verification_link}"
@@ -116,3 +117,19 @@ def profile_view(request, username=None):
     profile = user.profile
     
     return TemplateResponse(request, 'auth/profile.tpl.html', {'profile': profile, 'change_permission': change_permission})
+
+
+
+@login_required(login_url='/auth/signin/')
+def change_avatar(request, avatar):
+    avatar = int(avatar)
+    if avatar < 0 or avatar > 10:
+        return redirect('/profile/')
+
+
+    user = request.user
+    profile = user.profile
+    profile.avatar = avatar
+    profile.save()
+
+    return redirect('/profile/')
