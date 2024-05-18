@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, LoginForm
-from .models import User, EmailVerificationToken, Profile
+from .models import User, EmailVerificationToken, Profile, RecentActivity
 from .tokens import email_verification_token
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -63,7 +63,7 @@ def signin(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/')
+                return redirect('/profile/')
             else:
                 message = "Invalid username or password"
                 form.add_error('username', message)
@@ -115,8 +115,17 @@ def profile_view(request, username=None):
         change_permission = False
     
     profile = user.profile
-    
-    return TemplateResponse(request, 'auth/profile.tpl.html', {'profile': profile, 'change_permission': change_permission})
+    user_pokemons = request.user.profile.pokemons.all()
+    activities = RecentActivity.objects.all().order_by('-timestamp')[:10]
+
+    data = {
+        'profile': profile,
+        'user_pokemons': user_pokemons,
+        'change_permission': change_permission,
+        'activities': activities,
+    }
+
+    return TemplateResponse(request, 'auth/profile.tpl.html', data)
 
 
 
@@ -133,3 +142,9 @@ def change_avatar(request, avatar):
     profile.save()
 
     return redirect('/profile/')
+
+
+@login_required(login_url='/auth/signin/')
+def edit_profile(request):
+    pass
+    # change bio, change password (maybe something else)

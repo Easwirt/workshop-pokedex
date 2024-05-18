@@ -43,6 +43,8 @@ class Pokemon(models.Model):
     weight = models.FloatField(null=True)
     generation = models.IntegerField()
     is_legendary = models.BooleanField()
+    price = models.IntegerField(default=100)
 
     def __str__(self):
         return self.name
+

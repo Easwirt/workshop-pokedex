@@ -36,9 +36,18 @@
                                 {{ ability }}
                             {% endfor %}
                         </div>
+
+                        <div class="mb-6">
+                            <b>Price</b><br/>
+                            {{ pokemon.price }}$
+                        </div>
                     </div>
                 </div>
-
+            <form method="post" action="{% url 'purchase-pokemon' %}">
+                {% csrf_token %}
+                <input type="hidden" name="pokemon_id" value="{{ pokemon.id }}">
+                <button type="submit">Buy</button>
+            </form>
         </div>
     </div>
 </div>
