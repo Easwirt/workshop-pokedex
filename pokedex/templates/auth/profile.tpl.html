@@ -47,7 +47,7 @@
                                         <div class="card">
                                             <div class="card-body text-center">
                                                 <h5 class="card-title">{{ pokemon.name }}</h5>
-                                                <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/{{ pokemon.pokedex_number|stringformat:"03d" }}.png" title="{{ pokemon.name }}" alt="{{ pokemon.name }}" class="text-bg-light" style="width: 100px; height: 100px;">
+                                                <a href="/pokemons/{{ pokemon.pokedex_number }}"><img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/{{ pokemon.pokedex_number|stringformat:"03d" }}.png" title="{{ pokemon.name }}" alt="{{ pokemon.name }}" class="text-bg-light" style="width: 100px; height: 100px;"></a>
                                             </div>
                                         </div>
                                     </div>
