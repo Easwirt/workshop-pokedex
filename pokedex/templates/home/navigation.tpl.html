@@ -12,6 +12,8 @@
             {% include 'links/links.sign.html' %}
           {% elif request.path == '/profile/'%}
             {% include 'links/links.profile.html' %}
+          {% elif request.path|slice:"/pokemons/" %}
+            {% include 'links/links.pokemons.html' %}
           {% endif %}
         </ul>
         {% include "home/searchbar.tpl.html" %}
