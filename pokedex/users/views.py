@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpForm, LoginForm
-from .models import User, EmailVerificationToken, Profile, RecentActivity
+from .models import User, EmailVerificationToken, Profile, RecentActivity, UserAchievement
 from .tokens import email_verification_token
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -116,12 +116,14 @@ def profile_view(request, username=None):
     
     profile = user.profile
     user_pokemons = request.user.profile.pokemons.all()
+    achievements = UserAchievement.objects.filter(user=user)[:4]
     activities = RecentActivity.objects.all().order_by('-timestamp')[:10]
 
     data = {
         'profile': profile,
         'user_pokemons': user_pokemons,
         'change_permission': change_permission,
+        'achievements': achievements,
         'activities': activities,
     }
 
