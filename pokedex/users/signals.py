@@ -30,4 +30,4 @@ def update_achievements(sender, instance, **kwargs):
                     defaults={'description': description, 'icon': icon_number}
                 )
                 UserAchievement.objects.create(user=user, achievement=achievement)
-                RecentActivity.objects.create(user=user, activity_type=f"Reach achievement {name}")
+                RecentActivity.objects.create(user=user, activity_type=f"Reach achievement - {name}")
