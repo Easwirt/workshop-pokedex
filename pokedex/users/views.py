@@ -1,15 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
-from .models import User, EmailVerificationToken, Profile, RecentActivity, UserAchievement
 from .tokens import email_verification_token
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.utils.encoding import force_str, force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage
-from django.contrib.auth.decorators import login_required
-from django.template.response import TemplateResponse
 from pokedex.settings import DEFAULT_URL
+from .models import User, EmailVerificationToken
 
 def signup(request):
     if request.method == 'POST':
@@ -98,55 +96,3 @@ def email_verification(request, uidb64, token):
         message = "Invalid token!"
         token_obj.delete()
         return render(request, 'auth/emailverified.tpl.html', {'message' : message})
-
-
-
-
-@login_required(login_url='/auth/signin/')
-def profile_view(request, username=None):
-    if username:
-        user = get_object_or_404(User, username=username)
-    else:
-        user = request.user
-    
-    if user.username == request.user.username:
-        change_permission = True
-    else:
-        change_permission = False
-    
-    profile = user.profile
-    user_pokemons = request.user.profile.pokemons.all()
-    achievements = UserAchievement.objects.filter(user=user)[:4]
-    activities = RecentActivity.objects.all().order_by('-timestamp')[:10]
-
-    data = {
-        'profile': profile,
-        'user_pokemons': user_pokemons,
-        'change_permission': change_permission,
-        'achievements': achievements,
-        'activities': activities,
-    }
-
-    return TemplateResponse(request, 'auth/profile.tpl.html', data)
-
-
-
-@login_required(login_url='/auth/signin/')
-def change_avatar(request, avatar):
-    avatar = int(avatar)
-    if avatar < 0 or avatar > 10:
-        return redirect('/profile/')
-
-
-    user = request.user
-    profile = user.profile
-    profile.avatar = avatar
-    profile.save()
-
-    return redirect('/profile/')
-
-
-@login_required(login_url='/auth/signin/')
-def edit_profile(request):
-    pass
-    # change bio, change password (maybe something else)

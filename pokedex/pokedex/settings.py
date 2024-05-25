@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'pokemons',
+    'achievements',
+    'profiles',
 ]
 
 MIDDLEWARE = [

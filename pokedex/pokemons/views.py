@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Pokemon
-from users.models import Profile, RecentActivity
+from profiles.models import Profile, RecentActivity
 from .forms import SearchForm, PurchasePokemonForm
 from django.contrib.auth.decorators import login_required
 from .helpers import paginacia, levinstain

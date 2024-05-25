@@ -1,14 +1,11 @@
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
-from .models import Pokemon, Achievement, UserAchievement, RecentActivity
-from django.contrib.auth.models import User
-from .models import Profile
-
+from .models import Achievement, UserAchievement
+from profiles.models import RecentActivity, Profile
 
 @receiver(m2m_changed, sender=Profile.pokemons.through)
 def update_achievements(sender, instance, **kwargs):
     action = kwargs.pop('action', None)
-    pk_set = kwargs.pop('pk_set', None)
     
     if action == 'post_add':
         user = instance.user
