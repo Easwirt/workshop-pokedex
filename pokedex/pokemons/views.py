@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Pokemon
 from profiles.models import Profile, RecentActivity
-from .forms import SearchForm, PurchasePokemonForm
+from .forms import SearchForm, PurchasePokemonForm, SellPokemonForm
 from django.contrib.auth.decorators import login_required
 from .helpers import paginacia, levinstain
 from django.shortcuts import redirect
@@ -64,5 +64,30 @@ def purchasepokemon(request):
                 error_message = f'You dont have enough money to buy this pokemon. You have {profile.coins}'
                 messages.error(request, error_message)
                 return redirect('/profile')
+
+    return redirect('/profile')
+
+
+@login_required(login_url='/auth/signin/')
+def sellpokemon(request):
+    if request.method == 'POST':
+        form = SellPokemonForm(request.POST)
+        if form.is_valid():
+            pokemon_id = form.cleaned_data['pokemon_id']
+            profile = get_object_or_404(Profile, user=request.user)
+            pokemon = get_object_or_404(Pokemon, id=pokemon_id)
+
+            if profile.pokemons.filter(id=pokemon_id).exists():
+                profile.pokemons.remove(pokemon)
+                profile.coins += pokemon.price // 2
+                profile.save()
+                RecentActivity.objects.create(user=request.user, activity_type=f'Sold Pokemon - {pokemon.name}')
+                success_message = f'You sold {pokemon.name} for {pokemon.price // 2}$!'
+                messages.success(request, success_message)
+            else:
+                error_message = f'You dont have {pokemon.name}.'
+                messages.error(request, error_message)
+        
+            return redirect('/profile')
 
     return redirect('/profile')
