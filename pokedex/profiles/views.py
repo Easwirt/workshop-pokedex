@@ -3,6 +3,7 @@ from django.template.response import TemplateResponse
 from .models import User, RecentActivity
 from achievements.models import UserAchievement
 from django.shortcuts import get_object_or_404, redirect
+from pokemons.helpers import paginacia
 
 @login_required(login_url='/auth/signin/')
 def profile_view(request, username=None):
@@ -17,13 +18,17 @@ def profile_view(request, username=None):
         change_permission = False
     
     profile = user.profile
-    user_pokemons = request.user.profile.pokemons.all()
+
+    user_pokemons = user.profile.pokemons.all()
+    page_number = request.GET.get('page')
+    user_pokemons_paginacia = paginacia(user_pokemons, page_number, per_page=12) 
+
     achievements = UserAchievement.objects.filter(user=user)[:4]
     activities = RecentActivity.objects.all().order_by('-timestamp')[:10]
 
     data = {
         'profile': profile,
-        'user_pokemons': user_pokemons,
+        'user_pokemons_paginacia': user_pokemons_paginacia,
         'change_permission': change_permission,
         'achievements': achievements,
         'activities': activities,
