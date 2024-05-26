@@ -2,20 +2,24 @@ from django.contrib.auth.decorators import login_required
 from django.template.response import TemplateResponse
 from .models import User, RecentActivity
 from achievements.models import UserAchievement
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from pokemons.helpers import paginacia
 
 @login_required(login_url='/auth/signin/')
 def profile_view(request, username=None):
+    query = request.GET.get('query')
+    
+    if query:
+        users = User.objects.filter(username__icontains=query)
+        return render(request, 'auth/profilessearch.tpl.html', {'users': users, 'query': query})
+
+
     if username:
         user = get_object_or_404(User, username=username)
     else:
         user = request.user
     
-    if user.username == request.user.username:
-        change_permission = True
-    else:
-        change_permission = False
+    change_permission = user.username == request.user.username
     
     profile = user.profile
 
