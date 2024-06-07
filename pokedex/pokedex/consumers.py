@@ -2,11 +2,16 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
+def get_user():
+    return get_user_model()
+
+# Now you can use get_user() wherever you need to access the User model
+
 
 class PokemonConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
+        User = get_user()
 
         user_id = self.scope['user'].id
         user = User.objects.get(pk=user_id)
@@ -19,6 +24,7 @@ class PokemonConsumer(WebsocketConsumer):
         }))
 
     def disconnect(self, close_code):
+        User = get_user()
         user_id = self.scope['user'].id
         user = User.objects.get(pk=user_id)
         if(user.online_status > 0):
@@ -30,6 +36,7 @@ class PokemonConsumer(WebsocketConsumer):
         }))
 
     def receive(self, text_data):
+        User = get_user()
         data = json.loads(text_data)
         username = data.get('username')
         status = data.get('status')
