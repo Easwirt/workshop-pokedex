@@ -29,13 +29,16 @@ def profile_view(request, username=None):
 
     achievements = UserAchievement.objects.filter(user=user)[:4]
     activities = RecentActivity.objects.all().order_by('-timestamp')[:10]
+    online_status = profile.user.online_status
 
     data = {
+        'id': user.id,
         'profile': profile,
         'user_pokemons_paginacia': user_pokemons_paginacia,
         'change_permission': change_permission,
         'achievements': achievements,
         'activities': activities,
+        'online_status': online_status,
     }
 
     return TemplateResponse(request, 'auth/profile.tpl.html', data)
