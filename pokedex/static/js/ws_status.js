@@ -1,6 +1,6 @@
-const online_status = new WebSocket(
-    'ws://'+window.location.host+'/ws/'+'online/'
-)
+const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+const ws_url = `${wsProtocol}${window.location.host}/ws/online/`
+const online_status = new WebSocket(ws_url)
 
 online_status.onopen = function (e){
     console.log('connected');
