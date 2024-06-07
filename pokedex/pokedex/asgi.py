@@ -15,14 +15,12 @@ from channels.auth import AuthMiddlewareStack
 from . import routing
 
 
-# Set the DJANGO_SETTINGS_MODULE environment variable
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pokedex.settings')
 
-# Configure Django settings
 django_asgi_app = get_asgi_application()
 django.setup()
 
-# Create the ASGI application
+
 application = ProtocolTypeRouter({
     'http': django_asgi_app,
     'websocket': AuthMiddlewareStack(

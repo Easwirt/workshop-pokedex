@@ -66,7 +66,7 @@
 
                         <!-- Pagination -->
                         <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
+                            <ul class="pagination d-flex justify-content-center">
                                 {% if user_pokemons_paginacia.has_previous %}
                                     <li class="page-item">
                                         <a class="page-link" href="?page=1" aria-label="First">
@@ -81,18 +81,18 @@
                                 {% endif %}
                                 {% for num in user_pokemons_paginacia.paginator.page_range %}
                                     {% if user_pokemons_paginacia.number == num %}
-                                        <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                        <li class="page-item active mt-auto d-flex"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
                                     {% elif num > user_pokemons_paginacia.number|add:-3 and num < user_pokemons_paginacia.number|add:3 %}
-                                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                        <li class="page-item mt-auto d-flex"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
                                     {% endif %}
                                 {% endfor %}
                                 {% if user_pokemons_paginacia.has_next %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ user_pokemons_paginacia.next_page_number }}" aria-label="Next">
+                                    <li class="page-item align-bottom">
+                                        <a class="page-link mt-auto p-2" href="?page={{ user_pokemons_paginacia.next_page_number }}" aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
-                                    <li class="page-item">
+                                    <li class="page-item align-bottom">
                                         <a class="page-link" href="?page={{ user_pokemons_paginacia.paginator.num_pages }}" aria-label="Last">
                                             <span aria-hidden="true">&raquo;&raquo;</span>
                                         </a>

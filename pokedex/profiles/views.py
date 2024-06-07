@@ -12,7 +12,9 @@ def profile_view(request, username=None):
     if query:
         users = User.objects.filter(username__icontains=query)
         return render(request, 'auth/profilessearch.tpl.html', {'users': users, 'query': query})
-
+    elif query is '':
+        users = User.objects.filter(is_staff=False)[:8]
+        return render(request, 'auth/profilessearch.tpl.html', {'users': users})
 
     if username:
         user = get_object_or_404(User, username=username)
@@ -62,4 +64,3 @@ def change_avatar(request, avatar):
 @login_required(login_url='/auth/signin/')
 def edit_profile(request):
     pass
-    # change bio, change password (maybe something else)
