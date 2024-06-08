@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.template.response import TemplateResponse
-from .models import User, RecentActivity
+from .models import User, RecentActivity, Profile
+from .helpers import give_daily_reward
 from achievements.models import UserAchievement
 from django.shortcuts import get_object_or_404, redirect, render
 from pokemons.helpers import paginacia
+from django.contrib import messages
 
 @login_required(login_url='/auth/signin/')
 def profile_view(request, username=None):
@@ -59,6 +61,17 @@ def change_avatar(request, avatar):
     profile.save()
 
     return redirect('/profile/')
+
+
+@login_required
+def daily_reward(request):
+    profile = Profile.objects.get(user=request.user)
+    success, remaining_hours, remaining_minutes = give_daily_reward(profile)
+    if success:
+        messages.success(request, 'Bonus received! You have been awarded 100 coins.')
+    else:
+        messages.error(request, f'You can receive the next bonus after {int(remaining_hours)} hours and {int(remaining_minutes)} minutes.')
+    return redirect('my-profile')
 
 
 @login_required(login_url='/auth/signin/')

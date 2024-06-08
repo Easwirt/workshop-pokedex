@@ -11,6 +11,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=300)
     avatar = models.IntegerField(default=0)
     coins = models.IntegerField(default=100)
+    last_bonus_time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username
