@@ -67,9 +67,9 @@ def change_avatar(request, avatar):
 @login_required
 def daily_reward(request):
     profile = Profile.objects.get(user=request.user)
-    success, remaining_hours, remaining_minutes = give_daily_reward(profile)
+    success, bonus_coins, remaining_hours, remaining_minutes = give_daily_reward(profile)
     if success:
-        messages.success(request, 'Bonus received! You have been awarded 100 coins.')
+        messages.success(request, f'Bonus received! You have been awarded 100 coins plus {bonus_coins} bonus coins for your pokemons.')
     else:
         messages.error(request, f'You can receive the next bonus after {int(remaining_hours)} hours and {int(remaining_minutes)} minutes.')
     return redirect('my-profile')
