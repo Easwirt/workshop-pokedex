@@ -7,34 +7,34 @@
 <div class="container mt-4">
     <div class="row">
         <!-- Profile Sidebar -->
-        <div class="col-md-4">
-            <div class="card">
-                <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
-                <div class="card-body">
-                    <h5 class="card-title">{{ profile.user.username }}</h5>
-                    <p class="card-text small text-primary">{{ profile.coins }}$</p>
-    
-                    <!-- Online Status Indicator -->
-                    <div>
-                        <p id="user-status-{{ profile.user.username }}"></p>
-                    </div>
-    
-                    {% if profile.bio %}
-                    <p class="card-text">{{ profile.bio }}</p>
-                    {% endif %}
-                    {% if change_permission %}
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-primary">Edit Profile</button>
-                        <button id="openModalBtn" class="btn btn-secondary">Change Avatar</button>
-                        <form method="post" action="{% url 'daily-reward' %}" class="m-0">
-                            {% csrf_token %}
-                            <button class="btn btn-success" type="submit">Daily Reward</button>
-                        </form>
-                    </div>
-                    {% endif %}
+    <div class="col-md-4">
+        <div class="card">
+            <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
+            <div class="card-body">
+                <h5 class="card-title">{{ profile.user.username }}</h5>
+                <p class="card-text small text-primary">{{ profile.coins }}$</p>
+
+                <!-- Online Status Indicator -->
+                <div>
+                    <p id="user-status-{{ profile.user.username }}"></p>
                 </div>
+
+                {% if profile.bio %}
+                <p class="card-text">{{ profile.bio }}</p>
+                {% endif %}
+                {% if change_permission %}
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-primary">Edit Profile</button>
+                    <button id="openModalBtn" class="btn btn-secondary">Change Avatar</button>
+                    <form method="post" action="{% url 'daily-reward' %}" class="m-0">
+                        {% csrf_token %}
+                        <button class="btn btn-success" type="submit">Daily Reward</button>
+                    </form>
+                </div>
+                {% endif %}
             </div>
         </div>
+    </div>
 
         <!-- Main Content -->
         <div class="col md-8 d-flex">
