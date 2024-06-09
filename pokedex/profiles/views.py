@@ -6,6 +6,7 @@ from achievements.models import UserAchievement
 from django.shortcuts import get_object_or_404, redirect, render
 from pokemons.helpers import paginacia
 from django.contrib import messages
+from django.db.models import Count
 
 @login_required(login_url='/auth/signin/')
 def profile_view(request, username=None):
@@ -15,7 +16,7 @@ def profile_view(request, username=None):
         users = User.objects.filter(username__icontains=query)
         return render(request, 'auth/profilessearch.tpl.html', {'users': users, 'query': query})
     elif query is '':
-        users = User.objects.filter(is_staff=False)[:8]
+        users = User.objects.filter(is_staff=False).annotate(num_pokemons=Count('profile__pokemons')).order_by('-num_pokemons')[:8]
         return render(request, 'auth/profilessearch.tpl.html', {'users': users})
 
     if username:
@@ -32,7 +33,7 @@ def profile_view(request, username=None):
     user_pokemons_paginacia = paginacia(user_pokemons, page_number, per_page=12) 
 
     achievements = UserAchievement.objects.filter(user=user)[:4]
-    activities = RecentActivity.objects.all().order_by('-timestamp')[:10]
+    activities = RecentActivity.objects.filter(user=user).order_by('-timestamp')[:10]
     online_status = profile.user.online_status
 
     data = {
