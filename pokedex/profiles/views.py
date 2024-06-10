@@ -15,7 +15,7 @@ def profile_view(request, username=None):
     if query:
         users = User.objects.filter(username__icontains=query)
         return render(request, 'auth/profilessearch.tpl.html', {'users': users, 'query': query})
-    elif query is '':
+    elif query == '':
         users = User.objects.filter(is_staff=False).annotate(num_pokemons=Count('profile__pokemons')).order_by('-num_pokemons')[:8]
         return render(request, 'auth/profilessearch.tpl.html', {'users': users})
 
