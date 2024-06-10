@@ -1,22 +1,27 @@
 const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 const ws_url = `${wsProtocol}${window.location.host}/ws/online/`;
 console.log(ws_url)
-const online_status = new WebSocket(ws_url);
+const ws_status = new WebSocket(ws_url);
 
-online_status.onopen = function (e){
+ws_status.onopen = function (e){
     console.log('connected');
-        const username = getUserName(); // Assuming this function gets the current username
-        online_status.send(JSON.stringify({
-            'username': username,
-            'status': 'online'
-        }));
+        try {
+            const username = getUserName(); // Assuming this function gets the current username
+            ws_status.send(JSON.stringify({
+                'username': username,
+                'status': 'online'
+            }));
+        }
+        catch (err) {
+            console.log("Error get user name")
+        }
 }
 
-online_status.onclose = function (e){
+ws_status.onclose = function (e){
     console.log('disconected')
 }
 
-online_status.onmessage = function(e) {
+ws_status.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const username = getUserName(); // Assuming this function gets the current username
     const status = data.message;
@@ -45,7 +50,7 @@ online_status.onmessage = function(e) {
     }
 
     setTimeout(() => {
-        online_status.send(JSON.stringify({
+        ws_status.send(JSON.stringify({
             'username': username,
         }));
     }, 10000);
