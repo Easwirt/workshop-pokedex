@@ -30,7 +30,12 @@
                         {% csrf_token %}
                         <button class="btn btn-success" type="submit">Daily Reward</button>
                     </form>
+                    <button id="incomeMessages" class="btn btn-secondary">Income Messages</button>
                 </div>
+                {% else %}
+                    <div class="d-flex justify-content-between">
+                        <button id="Add-to-friend-btn" class="btn btn-warning">Add to friend</button>
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -126,8 +131,26 @@
                                 <div class="card-body text-center">
                                     {% with achievement=user_achievement.achievement %}
                                         <h5 class="card-title">{{ achievement.name }}</h5>
-                                        <img src="{% static 'achievements/' %}{{ achievement.icon }}ac.svg" title="{{ achievement.description }}" alt="{{ achievement.name }}" class="text-bg-light" style="width: 90px; height: 90px;">
+                                        <img src="{% static 'achievements/' %}{{ achievement.icon }}ac.svg"  title="{{ achievement.description }}" alt="{{ achievement.name }}" class="text-bg-light" style="width: 90px; height: 90px;">
                                     {% endwith %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Friends -->
+        <div class="card mb-3 mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Friends</h5>
+                <div class="row">
+                    {% for friend in friends %}
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p>{{ friend.profile.user.username }}</p>
                                 </div>
                             </div>
                         </div>
@@ -166,14 +189,37 @@
         </div>
     </div>
 </div>
+
+<div id="messageModal" class="modal">
+    <div class="modal-content">
+        <span id="close">&times;</span>
+        <div class="modal-body">
+            <h2>Income messages</h2>
+            <div class="avatar-options">
+                    <ul>
+                        {% for each in fiendsRequest %}
+                            <li>
+                                <button class="addFriendBtn">{{ each }}</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
         var userName = "{{ profile.user.username }}";
-
-        function getUserName(){
+        var requestUserName = "{{ requestUserName }}";
+        function getUserName() {
             return userName
         }
-    </script>
+        function  getRequestUserName(){
+            return requestUserName
+        }
+</script>
 <script src="{% static 'js/changeavatarprofile.js'%}"></script>
 <script src="{% static 'js/editprofile.js'%}"></script>
 <script src="{% static 'js/ws_status.js' %}"></script>
+<script src="{% static 'js/addToFriend.js' %}"></script>
+<script src="{% static 'js/incomeMessage.js' %}"></script>
 {% endblock content %}

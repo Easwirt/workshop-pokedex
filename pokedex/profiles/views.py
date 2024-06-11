@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.template.response import TemplateResponse
 from .models import User, RecentActivity, Profile
 from .helpers import give_daily_reward
@@ -36,7 +37,12 @@ def profile_view(request, username=None):
     activities = RecentActivity.objects.filter(user=user).order_by('-timestamp')[:10]
     online_status = profile.user.online_status
 
+    friends = profile.friends.all()
+
     data = {
+        'fiendsRequest': user.profile.friends_request.exclude(id=user.id),
+        'requestUserName': request.user.username,
+        'friends': friends,
         'id': user.id,
         'profile': profile,
         'user_pokemons_paginacia': user_pokemons_paginacia,
@@ -78,3 +84,25 @@ def daily_reward(request):
 @login_required(login_url='/auth/signin/')
 def edit_profile(request):
     pass
+
+
+@login_required(login_url='/auth/signin/')
+def friend_request(request, username, friendname):
+    user = get_object_or_404(User, username=username)
+    friend = get_object_or_404(User, username=friendname)
+
+    user.profile.friends_request.add(friend)
+    friend.profile.friends_request.add(user)
+    return JsonResponse({'status': 'success', 'message': 'Friend request sent.'})
+
+@login_required(login_url='/auth/signin/')
+def accept_friend_request(request, username, friendname):
+    user = get_object_or_404(User, username=username)
+    friend = get_object_or_404(User, username=friendname)
+
+    user.profile.friends.add(friend)
+    friend.profile.friends.add(user)
+
+    user.profile.friends_request.remove(friend)
+    friend.profile.friends_request.remove(user)
+    return JsonResponse({'status': 'success', 'message': 'Friend request sent.'})

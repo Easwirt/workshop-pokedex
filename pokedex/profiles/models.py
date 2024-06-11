@@ -12,6 +12,8 @@ class Profile(models.Model):
     avatar = models.IntegerField(default=0)
     coins = models.IntegerField(default=100)
     last_bonus_time = models.DateTimeField(null=True, blank=True)
+    friends = models.ManyToManyField(User, related_name='friends', blank=True)
+    friends_request = models.ManyToManyField(User, related_name='friends_request', blank=True)
 
     def __str__(self):
         return self.user.username

@@ -1,4 +1,3 @@
-// JavaScript code
 document.addEventListener("DOMContentLoaded", function() {
     var modal = document.getElementById('avatarModal');
     var btn = document.getElementById("openModalBtn");
@@ -13,11 +12,13 @@ document.addEventListener("DOMContentLoaded", function() {
         modal.style.display = "none";
     }
 
-    window.onclick = function(event) {
+
+
+    window.addEventListener("click", function (event){
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    }
+    })
 
     avatarOptions.forEach(function(avatar) {
         avatar.addEventListener('click', function() {
