@@ -4,17 +4,13 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentAchievementPage = 1;
     const achievementCards = document.querySelectorAll(".achievement-card");
     const totalAchievementPages = Math.ceil(achievementCards.length / itemsPerPage);
-    const achievementNavigation = document.getElementsByClassName("achievement-navigation");
+    const achievementNavigation = document.getElementById("achievement-navigation");
 
     
     if (achievementCards.length <= itemsPerPage) {
-    Array.from(achievementNavigation).forEach(element => {
-        element.style.display = 'none';
-    });
+        achievementNavigation.style.display = 'none';
     } else {
-        Array.from(achievementNavigation).forEach(element => {
-            element.style.display = 'flex';
-        });
+        achievementNavigation.style.display = 'flex';
     }
 
 
@@ -44,16 +40,12 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentFriendsPage = 1;
     const friendCards = document.querySelectorAll(".friend-card");
     const totalFriendsPages = Math.ceil(friendCards.length / itemsPerPage);
-    const friendsNavigation = document.getElementsByClassName("friends-navigation");
+    const friendsNavigation = document.getElementById("friends-navigation");
 
     if (friendCards.length <= itemsPerPage) {
-        Array.from(friendsNavigation).forEach(element => {
-            element.style.display = 'none';
-        })
+        friendsNavigation.style.display = 'none';
     } else {
-        Array.from(friendsNavigation).forEach(element => {
-            element.style.display = 'flex';
-        })
+        friendsNavigation.style.display = 'flex';
     }
 
     function showFriendsPage(page) {
