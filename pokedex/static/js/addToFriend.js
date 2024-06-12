@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var addToFriendBtn = document.getElementById("Add-to-friend-btn");
+    var message = document.getElementById("message")
+    var messages = document.getElementById("messages");
 
     addToFriendBtn.onclick = function() {
         var username = getRequestUserName();
@@ -20,11 +22,13 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(data => {
                 console.log('Success:', data);
-                // Optionally, you can update the UI based on the response
+
                 if (data.status === 'success') {
-                    // Handle success case
-                } else {
-                    // Handle failure case
+                    message.innerText = "New friend request send"
+                    messages.style.display = 'block';
+                } else if(data.status === 'error'){
+                    message.innerText = "You already send request"
+                    messages.style.display = 'block';
                 }
             })
             .catch((error) => {
