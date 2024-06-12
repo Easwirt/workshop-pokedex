@@ -52,7 +52,7 @@ def profile_view(request, username=None):
         'online_status': online_status,
     }
 
-    return TemplateResponse(request, 'auth/profile.tpl.html', data)
+    return TemplateResponse(request, 'profile/profile.tpl.html', data)
 
 
 @login_required(login_url='/auth/signin/')
@@ -83,7 +83,7 @@ def daily_reward(request):
 
 @login_required(login_url='/auth/signin/')
 def edit_profile(request):
-    pass
+    return TemplateResponse(request, 'profile/editprofile.tpl.html')
 
 
 @login_required(login_url='/auth/signin/')

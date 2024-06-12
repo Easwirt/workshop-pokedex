@@ -65,6 +65,9 @@ document.addEventListener("DOMContentLoaded", function() {
             showFriendsPage(currentFriendsPage);
         }
     });
-
+    
+    console.log(friendCards.length);
+    console.log(achievementCards.length);
+    console.log(itemsPerPage);
     showFriendsPage(currentFriendsPage);
 });
