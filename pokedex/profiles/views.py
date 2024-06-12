@@ -33,14 +33,14 @@ def profile_view(request, username=None):
     page_number = request.GET.get('page')
     user_pokemons_paginacia = paginacia(user_pokemons, page_number, per_page=12) 
 
-    achievements = UserAchievement.objects.filter(user=user)[:4]
+    achievements = UserAchievement.objects.filter(user=user)[:8]
     activities = RecentActivity.objects.filter(user=user).order_by('-timestamp')[:10]
     online_status = profile.user.online_status
 
     friends = profile.friends.all()
 
     data = {
-        'fiendsRequest': user.profile.friends_request.exclude(id=user.id),
+        'friendsRequest': user.profile.friends_request.exclude(id=user.id),
         'requestUserName': request.user.username,
         'friends': friends,
         'id': user.id,
@@ -105,4 +105,4 @@ def accept_friend_request(request, username, friendname):
 
     user.profile.friends_request.remove(friend)
     friend.profile.friends_request.remove(user)
-    return JsonResponse({'status': 'success', 'message': 'Friend request sent.'})
+    return JsonResponse({'status': 'success', 'message': 'Friend request accepted.'})
