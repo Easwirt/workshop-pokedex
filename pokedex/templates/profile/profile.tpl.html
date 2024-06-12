@@ -49,6 +49,9 @@
             <div class="card mb-3 w-100">
                 <div class="card-body">
                     <h5 class="card-title">My Pokémon</h5>
+                    <ul id="messages" style="display: none">
+                        <li id="message"></li>
+                    </ul>
                     {% if messages %}
                     <ul class="messages">
                         {% for message in messages %}

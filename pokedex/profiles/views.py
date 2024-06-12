@@ -90,10 +90,11 @@ def edit_profile(request):
 def friend_request(request, username, friendname):
     user = get_object_or_404(User, username=username)
     friend = get_object_or_404(User, username=friendname)
-
-    user.profile.friends_request.add(friend)
-    friend.profile.friends_request.add(user)
-    return JsonResponse({'status': 'success', 'message': 'Friend request sent.'})
+    if user in friend.profile.friends_request.all():
+        return JsonResponse({'status': 'error', 'message': 'Friend request already sent.'})
+    else:
+        friend.profile.friends_request.add(user)
+        return JsonResponse({'status': 'success', 'message': 'Friend request sent.'})
 
 @login_required(login_url='/auth/signin/')
 def accept_friend_request(request, username, friendname):
