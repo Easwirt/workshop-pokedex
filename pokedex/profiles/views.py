@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.template.response import TemplateResponse
 from .models import User, RecentActivity, Profile
 from .helpers import give_daily_reward
+from .forms import BioForm
 from achievements.models import UserAchievement
 from django.shortcuts import get_object_or_404, redirect, render
 from pokemons.helpers import paginacia
@@ -66,8 +67,9 @@ def change_avatar(request, avatar):
     profile = user.profile
     profile.avatar = avatar
     profile.save()
+    messages.success(request, 'Avatar changed!')
 
-    return redirect('/profile/')
+    return redirect('/profile/editprofile/')
 
 
 @login_required
@@ -83,7 +85,21 @@ def daily_reward(request):
 
 @login_required(login_url='/auth/signin/')
 def edit_profile(request):
-    return TemplateResponse(request, 'profile/editprofile.tpl.html')
+    if request.method == 'POST':
+        form = BioForm(request.POST)
+        if form.is_valid():
+            new_bio = form.cleaned_data['bio']
+            request.user.profile.bio = new_bio
+            request.user.profile.save()
+            messages.success(request, 'Bio updated!')
+            return TemplateResponse(request, 'profile/editprofile.tpl.html', {'form': form})
+        else:
+            message = "Invalid bio"
+            form.add_error('bio', message)
+            return TemplateResponse(request, 'profile/editprofile.tpl.html', {'form': form})
+    else:
+        form = BioForm()
+    return TemplateResponse(request, 'profile/editprofile.tpl.html', {'form': form})
 
 
 @login_required(login_url='/auth/signin/')

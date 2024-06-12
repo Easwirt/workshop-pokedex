@@ -25,7 +25,6 @@
                 {% if change_permission %}
                 <div class="d-flex justify-content-between">
                     <a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
-                    <button id="openModalBtn" class="btn btn-secondary">Change Avatar</button>
                     <form method="post" action="{% url 'daily-reward' %}" class="m-0">
                         {% csrf_token %}
                         <button class="btn btn-success" type="submit">Daily Reward</button>
@@ -198,20 +197,6 @@
         </div>
     </div>
 </div>
-    <div id="avatarModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="modal-body">
-                <h2>Select Your Avatar</h2>
-                <div class="avatar-options">
-                    {% for i in 'x'|rjust:10 %}
-                    <img src="{% static 'avatars/' %}{{ forloop.counter0 }}.png" alt="{{ forloop.counter0 }}" class="avatar" data-avatar="{{ forloop.counter0 }}">
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="messageModal" class="modal">
         <div class="modal-content">
             <span id="close">&times;</span>
@@ -239,7 +224,6 @@
             return requestUserName
         }
 </script>
-<script src="{% static 'js/changeAvatarProfile.js'%}"></script>
 <script src="{% static 'js/editProfile.js'%}"></script>
 <script src="{% static 'js/ws_status.js' %}"></script>
 <script src="{% static 'js/addToFriend.js' %}"></script>
