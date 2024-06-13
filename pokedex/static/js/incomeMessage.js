@@ -4,8 +4,10 @@ document.addEventListener("DOMContentLoaded", function (){
     var span = document.getElementById('close');
     var addFriendBtns = document.getElementsByClassName('addFriendBtn')
 
-    messageBtn.onclick = function (){
-        modal.style.display = "block";
+    if(messageBtn) {
+        messageBtn.onclick = function () {
+            modal.style.display = "block";
+        }
     }
 
     span.onclick = function() {

@@ -68,8 +68,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     
-    console.log(friendCards.length);
-    console.log(achievementCards.length);
-    console.log(itemsPerPage);
+    // console.log(friendCards.length);
+    // console.log(achievementCards.length);
+    // console.log(itemsPerPage);
     showFriendsPage(currentFriendsPage);
 });

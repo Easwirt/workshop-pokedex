@@ -40,6 +40,7 @@ def profile_view(request, username=None):
 
     friends = profile.friends.all()
 
+    print(user.profile.friends_request.all())
     data = {
         'friendsRequest': user.profile.friends_request.exclude(id=user.id),
         'requestUserName': request.user.username,
@@ -106,7 +107,7 @@ def edit_profile(request):
 def friend_request(request, username, friendname):
     user = get_object_or_404(User, username=username)
     friend = get_object_or_404(User, username=friendname)
-    if user in friend.profile.friends_request.all():
+    if user in friend.profile.friends_request.all() or user in friend.profile.friends.all():
         return JsonResponse({'status': 'error', 'message': 'Friend request already sent.'})
     else:
         friend.profile.friends_request.add(user)
@@ -123,3 +124,12 @@ def accept_friend_request(request, username, friendname):
     user.profile.friends_request.remove(friend)
     friend.profile.friends_request.remove(user)
     return JsonResponse({'status': 'success', 'message': 'Friend request accepted.'})
+
+@login_required(login_url='/auth/signin/')
+def remove_user_from_friend(request, username, friendname):
+    user = get_object_or_404(User, username=username)
+    friend = get_object_or_404(User, username=friendname)
+    user.profile.friends.remove(friend)
+    friend.profile.friends.remove(user)
+
+    return JsonResponse({'status': 'success', 'message': 'User removed.'})

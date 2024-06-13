@@ -1,6 +1,5 @@
 const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
 const ws_url = `${wsProtocol}${window.location.host}/ws/online/`;
-console.log(ws_url)
 const ws_status = new WebSocket(ws_url);
 
 ws_status.onopen = function (e){
@@ -25,9 +24,7 @@ ws_status.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const username = getUserName(); // Assuming this function gets the current username
     const status = data.message;
-    console.log(data);
-    console.log(username);
-    console.log(status);
+    console.log(username, status, data);
 
     statusOnline = 'Online';
     if(status === "0"){
