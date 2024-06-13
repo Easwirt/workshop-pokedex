@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.response import TemplateResponse
@@ -42,6 +43,7 @@ def profile_view(request, username=None):
 
     print(user.profile.friends_request.all())
     data = {
+        'defaultURL': settings.DEFAULT_URL,
         'friendsRequest': user.profile.friends_request.exclude(id=user.id),
         'requestUserName': request.user.username,
         'friends': friends,

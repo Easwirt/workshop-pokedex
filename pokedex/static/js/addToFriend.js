@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var addToFriendBtn = document.getElementById("Add-to-friend-btn");
     var message = document.getElementById("message")
     var messages = document.getElementById("messages");
+    var defaultURL = getDefaultURL();
 
     var removeFromFriendsBt = document.getElementById("Remove-from-friend-btn");
 
@@ -14,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 var username = getRequestUserName()
                 var friend_name = getUserName()
 
-                fetch(`http://127.0.0.1:8000/profile/removefriend/${username}/${friend_name}/`, {
+                fetch(`/profile/removefriend/${username}/${friend_name}/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     })
                     .then(data => {
                         console.log(data);
-                        window.location.host = `127.0.0.1/profile/${friend_name}`
+                        window.location.host = `${defaultURL}profile/${friend_name}`
                     })
             }
             else{
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
         addToFriendBtn.onclick = function() {
             var username = getRequestUserName();
             var friend_name = getUserName();
-            fetch(`http://127.0.0.1:8000/profile/friendrequest/${username}/${friend_name}/`, {
+            fetch(`/profile/friendrequest/${username}/${friend_name}/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

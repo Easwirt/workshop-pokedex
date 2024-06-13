@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function (){
         addFriendBtns[i].onclick = function (){
             var friend_name = this.innerText;
             var username = getRequestUserName();
-        fetch(`http://127.0.0.1:8000/profile/acceptfriendrequest/${username}/${friend_name}/`, {
+        fetch(`/profile/acceptfriendrequest/${username}/${friend_name}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -222,6 +222,7 @@
         </div>
     </div>
 <script>
+        var defaultURL = "{{ defaultURL }}"
         var userName = "{{ profile.user.username }}";
         var requestUserName = "{{ requestUserName }}";
         function getUserName() {
@@ -229,6 +230,9 @@
         }
         function  getRequestUserName(){
             return requestUserName
+        }
+        function getDefaultURL(){
+            return defaultURL;
         }
 </script>
 <script src="{% static 'js/editProfile.js'%}"></script>
