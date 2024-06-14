@@ -139,17 +139,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            fetch('/profile/editprofile/changepassword/', {
+            fetch(`/profile/editprofile/changepassword/${oldPassword}/${newPassword1}/${newPassword2}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken')
                 },
-                body: JSON.stringify({
-                    'old_password': oldPassword,
-                    'new_password1': newPassword1,
-                    'new_password2': newPassword2
-                })
             })
             .then(response => {
                 if (response.ok) {

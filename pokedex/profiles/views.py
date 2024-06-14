@@ -186,11 +186,9 @@ def update_bio(request, new_bio):
         return redirect('edit-profile')
     
 @login_required(login_url='/auth/signin/')
-def change_password(request):
+def change_password(request, old_password, new_password1, new_password2):
     if request.method == 'POST':
-        old_password = request.POST.get('old_password')
-        new_password1 = request.POST.get('new_password1')
-        new_password2 = request.POST.get('new_password2')
+        print(old_password)
 
         if not request.user.is_authenticated:
             return JsonResponse({'success': False, 'error': 'User is not authenticated.'}, status=401)
