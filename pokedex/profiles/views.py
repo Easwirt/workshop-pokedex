@@ -1,4 +1,6 @@
+import json
 from django.conf import settings
+from users.views import send_mail
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.template.response import TemplateResponse
@@ -9,7 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from pokemons.helpers import paginacia
 from django.contrib import messages
 from django.db.models import Count
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 
 @login_required(login_url='/auth/signin/')
 def profile_view(request, username=None):
@@ -186,26 +188,31 @@ def update_bio(request, new_bio):
         return redirect('edit-profile')
     
 @login_required(login_url='/auth/signin/')
-def change_password(request, old_password, new_password1, new_password2):
+def change_password(request):
     if request.method == 'POST':
-        print(old_password)
 
-        if not request.user.is_authenticated:
-            return JsonResponse({'success': False, 'error': 'User is not authenticated.'}, status=401)
-
-        if new_password1 != new_password2:
-            return JsonResponse({'success': False, 'error': 'New passwords do not match.'}, status=400)
+        data = json.loads(request.body.decode('utf-8')) 
+        old_password = data.get('old_password')
+        new_password1 = data.get('new_password1')
 
         user = authenticate(username=request.user.username, password=old_password)
         if user is None:
             return JsonResponse({'success': False, 'error': 'Incorrect old password.'}, status=400)
 
+        if not request.user.is_authenticated:
+            return JsonResponse({'success': False, 'error': 'User is not authenticated.'}, status=401)
+
+        login(request, user)
+
+        subject = 'Password changed'
+        message = 'Your password has been changed successfully.'
+        send_mail(user=user, subject=subject, message=message)
         user.set_password(new_password1)
         user.save()
 
         return JsonResponse({'success': True, 'message': 'Password changed successfully.'})
-
-    return JsonResponse({'error': 'Method not allowed.'}, status=405)
+    else:
+        return redirect('edit-profile')
 
 
 @login_required(login_url='/auth/signin/')

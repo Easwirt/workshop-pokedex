@@ -99,3 +99,8 @@ def email_verification(request, uidb64, token):
         message = "Invalid token!"
         token_obj.delete()
         return render(request, 'auth/emailverified.tpl.html', {'message' : message})
+    
+def send_mail(user, subject, message):
+    email = user.email
+    email = EmailMessage(subject, message, to=[email])
+    email.send()

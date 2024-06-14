@@ -4,7 +4,7 @@
 {% block title %} {{ profile.user.username }} {% endblock title %}
 
 {% block content %}
-{% if privacy == 0 or privacy == 1 and is_friend or privacy == 2 and change_permission %}
+{% if privacy == 0 or privacy == 1 and is_friend or change_permission %}
 <div class="container mt-4">
     <div class="row">
         <!-- Profile Sidebar -->

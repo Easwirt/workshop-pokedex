@@ -8,13 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var currentBio = document.getElementById("currentBio");
     var recentActivity = document.getElementById("recentActivity");
     var changePasswordBtn = document.getElementById("changePasswordBtn");
-    var passwordForm = document.getElementById("passwordForm");
-    var oldPasswordInput = document.getElementById("oldPassword");
-    var newPassword1Input = document.getElementById("newPassword1");
-    var newPassword2Input = document.getElementById("newPassword2");
-    var savePasswordBtn = document.getElementById("savePasswordBtn");
-    var cancelPasswordBtn = document.getElementById("cancelPasswordBtn");
-    var privacySettingsBtn = document.getElementById("privacySettingsBtn");
+    var passwordFormContainer = document.getElementById('passwordFormContainer');
+    var oldPasswordInput = document.getElementById('oldPassword');
+    var newPassword1Input = document.getElementById('newPassword1');
+    var newPassword2Input = document.getElementById('newPassword2');
+    var savePasswordBtn = document.getElementById('savePasswordBtn');
+    var cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
 
 
     function getCookie(name) {
@@ -112,19 +111,14 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    if (changePasswordBtn && passwordForm && oldPasswordInput && newPassword1Input && newPassword2Input && savePasswordBtn && cancelPasswordBtn) {
+    if (savePasswordBtn && cancelPasswordBtn) {
         changePasswordBtn.onclick = function () {
-            passwordForm.style.display = 'block';
+            passwordFormContainer.style.display = 'block';
         };
 
-        cancelPasswordBtn.onclick = function () {
-            passwordForm.style.display = 'none';
-            oldPasswordInput.value = '';
-            newPassword1Input.value = '';
-            newPassword2Input.value = '';
-        };
+        savePasswordBtn.addEventListener('click', function (event) {
+            event.preventDefault();
 
-        savePasswordBtn.onclick = function () {
             var oldPassword = oldPasswordInput.value.trim();
             var newPassword1 = newPassword1Input.value.trim();
             var newPassword2 = newPassword2Input.value.trim();
@@ -139,12 +133,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            fetch(`/profile/editprofile/changepassword/${oldPassword}/${newPassword1}/${newPassword2}/`, {
+            fetch('/profile/editprofile/changepassword/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': getCookie('csrftoken')
                 },
+                body: JSON.stringify({
+                    old_password: oldPassword,
+                    new_password1: newPassword1,
+                    new_password2: newPassword2
+                })
             })
             .then(response => {
                 if (response.ok) {
@@ -156,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('Password changed successfully:', data);
                 alert('Password changed successfully!');
-                passwordForm.style.display = 'none';
+                passwordFormContainer.style.display = 'none';
                 oldPasswordInput.value = '';
                 newPassword1Input.value = '';
                 newPassword2Input.value = '';
@@ -166,7 +165,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error changing password:', error);
                 alert('Error changing password. Please try again.');
             });
-        };
+        });
+
+        cancelPasswordBtn.addEventListener('click', function () {
+            passwordFormContainer.style.display = 'none';
+            oldPasswordInput.value = '';
+            newPassword1Input.value = '';
+            newPassword2Input.value = '';
+        });
     }
 
     if (privacySettingsBtn) {

@@ -129,13 +129,12 @@
                 </div>
             </div>
         </div>
-        <div class="password" id="passwordForm" style="display: none;">
+        <div class="password" id="passwordFormContainer" style="display: none;">
             <div class="row justify-content-center mt-5">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">Change Password</div>
                         <div class="card-body">
-                            <form id="passwordForm">
+                            <form id="passwordChangeForm">
                                 <div class="form-group">
                                     <label for="oldPassword">Old Password</label>
                                     <input type="password" class="form-control" id="oldPassword" name="old_password" required>
@@ -148,8 +147,8 @@
                                     <label for="newPassword2">Confirm New Password</label>
                                     <input type="password" class="form-control" id="newPassword2" name="new_password2" required>
                                 </div>
-                                <button type="submit" id="savePasswordBtn" class="btn btn-success">Change Password</button>
-                                <button type="button" id="cancelPasswordBtn" class="btn btn-secondary">Cancel</button>
+                                <button type="submit" id="savePasswordBtn" class="btn btn-success mt-1">Change Password</button>
+                                <button type="button" id="cancelPasswordBtn" class="btn btn-secondary mt-1">Cancel</button>
                             </form>
                         </div>
                     </div>
