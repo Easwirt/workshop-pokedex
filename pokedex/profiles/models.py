@@ -8,12 +8,13 @@ from users.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     pokemons = models.ManyToManyField(Pokemon, blank=True)
-    bio = models.TextField(max_length=100)
+    bio = models.TextField(max_length=100, default="Hi, there!")
     avatar = models.IntegerField(default=0)
     coins = models.IntegerField(default=100)
     last_bonus_time = models.DateTimeField(null=True, blank=True)
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
     friends_request = models.ManyToManyField(User, related_name='friends_request', blank=True)
+    privacy = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username
