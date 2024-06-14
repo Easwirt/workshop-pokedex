@@ -224,6 +224,18 @@
     </div>
 {% else %}
 <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
+    <div class="col-md-3">
+        <div class="card">
+            <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
+            <div class="card-body">
+                <h5 class="card-title">{{ profile.user.username }}</h5>
+
+                <div>
+                    <p id="user-status-{{ profile.user.username }}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
     <h2>User profile is private.</h2>
     <button id="Add-to-friend-btn" class="btn btn-warning">Add to friends</button>
 </div>
