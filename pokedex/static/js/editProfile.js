@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var newPassword2Input = document.getElementById("newPassword2");
     var savePasswordBtn = document.getElementById("savePasswordBtn");
     var cancelPasswordBtn = document.getElementById("cancelPasswordBtn");
+    var privacySettingsBtn = document.getElementById("privacySettingsBtn");
 
 
     function getCookie(name) {
@@ -170,6 +171,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error changing password:', error);
                 alert('Error changing password. Please try again.');
             });
+        };
+    }
+
+    if (privacySettingsBtn) {
+        privacySettingsBtn.onclick = function () {
+            var selectedPrivacy = prompt('Choose Privacy Setting:\n\n0. Public\n1. Friends Only\n2. Private');
+
+            if (selectedPrivacy !== null) {
+                var newPrivacyValue = parseInt(selectedPrivacy.trim());
+
+                if ([0, 1, 2].includes(newPrivacyValue)) {
+                    var formData = new FormData();
+                    formData.append('privacy_value', newPrivacyValue);
+
+                    fetch('/profile/editprofile/updateprivacy/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: formData
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Network response not ok.');
+                        }
+                    })
+                    .then(data => {
+                        console.log('Privacy updated successfully:', data);
+                        alert('Privacy setting updated successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error updating privacy:', error);
+                        alert('Error updating privacy. Please try again.');
+                    });
+                } else {
+                    alert('Invalid selection. Please choose 0, 1, or 2.');
+                }
+            } else {
+                console.log('User cancelled privacy settings.');
+            }
         };
     }
 });

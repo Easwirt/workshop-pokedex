@@ -16,10 +16,10 @@ def profile_view(request, username=None):
     query = request.GET.get('query')
     
     if query:
-        users = User.objects.filter(username__icontains=query)
+        users = User.objects.filter(username__icontains=query, is_staff=False)
         return render(request, 'auth/profilessearch.tpl.html', {'users': users, 'query': query})
     elif query == '':
-        
+    
         users = User.objects.filter(is_staff=False).annotate(num_pokemons=Count('profile__pokemons')).order_by('-num_pokemons')[:8]
         return render(request, 'auth/profilessearch.tpl.html', {'users': users})
 
@@ -42,6 +42,9 @@ def profile_view(request, username=None):
 
     friends = profile.friends.all()
 
+    privacy = profile.privacy
+    is_friend = request.user in profile.friends.all()
+
     data = {
         'defaultURL': settings.DEFAULT_URL,
         'friendsRequest': user.profile.friends_request.exclude(id=user.id),
@@ -49,6 +52,8 @@ def profile_view(request, username=None):
         'friends': friends,
         'id': user.id,
         'profile': profile,
+        'is_friend': is_friend,
+        'privacy': privacy,
         'user_pokemons_paginacia': user_pokemons_paginacia,
         'change_permission': change_permission,
         'achievements': achievements,
@@ -202,4 +207,20 @@ def change_password(request):
 
         return JsonResponse({'success': True, 'message': 'Password changed successfully.'})
 
+    return JsonResponse({'error': 'Method not allowed.'}, status=405)
+
+
+@login_required(login_url='/auth/signin/')
+def update_privacy(request):
+    if request.method == 'POST':
+        privacy_value = request.POST.get('privacy_value')
+
+        if privacy_value in ['0', '1', '2']:
+            profile = Profile.objects.get(user=request.user)
+            profile.privacy = int(privacy_value)
+            profile.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'error': 'Invalid privacy value'}, status=400)
+    
     return JsonResponse({'error': 'Method not allowed.'}, status=405)

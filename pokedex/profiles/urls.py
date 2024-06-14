@@ -8,6 +8,7 @@ urlpatterns = [
     path('editprofile/clearrecentactivity/', clear_recent_activity, name='clear-recent-activity'),
     path('editprofile/changepassword/', change_password, name='change-password'),
     path('editprofile/updatebio/<str:new_bio>/', update_bio, name='update-bio'),
+    path('editprofile/updateprivacy/', update_privacy, name='update-privacy'),
     path('<str:username>/', profile_view, name='user-profile'),
     path('', profile_view, name='my-profile'),
     path('friendrequest/<str:username>/<str:friendname>/', friend_request, name='friend-request'),
