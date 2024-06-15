@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var newPassword2Input = document.getElementById('newPassword2');
     var savePasswordBtn = document.getElementById('savePasswordBtn');
     var cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+    var modal = document.getElementById('avatarModal');
+    var btn = document.getElementById("openModalBtn");
+    var span = document.getElementsByClassName("close")[0];
+    var avatarOptions = document.querySelectorAll('.avatar');
 
 
     function getCookie(name) {
@@ -216,4 +220,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
     }
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.addEventListener("click", function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    avatarOptions.forEach(function(avatar) {
+        avatar.addEventListener('click', function() {
+            var selectedAvatar = this.getAttribute('data-avatar');
+            window.location.href = 'changeavatar/' + selectedAvatar;
+            modal.style.display = "none";
+        });
+    });
 });

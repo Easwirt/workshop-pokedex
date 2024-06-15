@@ -52,7 +52,18 @@
             <!-- Pokemon collection -->
             <div class="card mb-3 w-100">
                 <div class="card-body">
-                    <h5 class="card-title">My Pokémon</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title mb-0">My Pokémon</h5>
+                        <h5 class="card-title mb-0">Privacy:
+                            {% if privacy == 0 %}
+                            Public
+                            {% elif privacy == 1 %}
+                            Friends only
+                            {% elif privacy == 2 %}
+                            Private
+                            {% endif %}
+                        </h5>
+                    </div>
                     <ul id="messages" style="display: none">
                         <li id="message"></li>
                     </ul>

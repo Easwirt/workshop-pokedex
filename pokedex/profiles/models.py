@@ -16,6 +16,7 @@ class Profile(models.Model):
     friends_request = models.ManyToManyField(User, related_name='friends_request', blank=True)
     privacy = models.IntegerField(default=0)
 
+
     def __str__(self):
         return self.user.username
     
