@@ -29,7 +29,6 @@
                         {% csrf_token %}
                         <button class="btn btn-success" type="submit">Daily Reward</button>
                     </form>
-                    <button id="incomeMessages" class="btn btn-secondary">Income Messages</button>
                 </div>
                 {% else %}
                     {% if request.user not in friends %}
@@ -201,26 +200,6 @@
         </div>
     </div>
 </div>
-    <div id="messageModal" class="modal">
-        <div class="modal-content">
-            <span id="close">&times;</span>
-            <div class="modal-body">
-                <h2>Income messages</h2>
-                <div class="avatar-options">
-                        <ul>
-                            {% for user in friendsRequest %}
-                            <li>
-                                <button class="addFriendBtn">{{ user.username }}</button>
-                            </li>
-                            {% endfor %}
-                            {% if not friendsRequest %}
-                                <li>No friend requests found.</li>
-                            {% endif %}
-                        </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 <script>
         var defaultURL = "{{ defaultURL }}"
         var userName = "{{ profile.user.username }}";

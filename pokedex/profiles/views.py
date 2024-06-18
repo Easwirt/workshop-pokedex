@@ -116,7 +116,8 @@ def friend_request(request, username, friendname):
         return JsonResponse({'status': 'success', 'message': 'Friend request sent.'})
 
 @login_required(login_url='/auth/signin/')
-def accept_friend_request(request, username, friendname):
+def accept_friend_request(request, friendname):
+    username = request.user.username
     user = get_object_or_404(User, username=username)
     friend = get_object_or_404(User, username=friendname)
 
@@ -135,3 +136,23 @@ def remove_user_from_friend(request, username, friendname):
     friend.profile.friends.remove(user)
 
     return JsonResponse({'status': 'success', 'message': 'User removed.'})
+
+@login_required(login_url='auth/signin/')
+def show_friends(request):
+    friends = request.user.profile.friends_request.all()
+    data = []
+    for friend in friends:
+        friend = friend
+        data.append({
+            'username': friend.username,
+            'avatar': friend.profile.avatar,
+        })
+
+    return JsonResponse({'friends': data})
+
+@login_required(login_url='/auth/signin/')
+def decline_friend_request(request, friendname):
+    user = get_object_or_404(User, username=request.user.username)
+    friend = get_object_or_404(User, username=friendname)
+    user.profile.friends_request.remove(friend)
+    return JsonResponse({'status': 'success', 'message': 'Friend request declined.'})
