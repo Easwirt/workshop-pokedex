@@ -1,25 +1,6 @@
-
 {% if request.user.is_authenticated %}
-    {% load static %}
-    <button id="incomeMessages" class="btn btn-secondary">Income Messages</button>
-
-    <div id="messageModal" class="modal">
-        <div class="modal-content">
-            <span id="close">&times;</span>
-            <div class="modal-body">
-                <h2>Income messages</h2>
-                <div class="avatar-options">
-                        <ul id="friendsList"></ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="{% static 'js/incomeMessage.js' %}"></script>
-    <script>
-        var imgLink = `{% static 'avatars/' %}`
-        function getImgLink(){
-            return imgLink;
-        }
-    </script>
+<form class="d-flex" role="search" action="/pokemons/" method="get">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
 {% endif %}
-
