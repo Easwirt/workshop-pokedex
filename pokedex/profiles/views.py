@@ -126,6 +126,7 @@ def accept_friend_request(request, friendname):
 
     user.profile.friends_request.remove(friend)
     friend.profile.friends_request.remove(user)
+    RecentActivity.objects.create(user=request.user, activity_type=f'{user.username} now friend with {friend.usernamename}')
     return JsonResponse({'status': 'success', 'message': 'Friend request accepted.'})
 
 @login_required(login_url='/auth/signin/')
