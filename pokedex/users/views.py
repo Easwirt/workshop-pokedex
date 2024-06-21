@@ -8,6 +8,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage
 from pokedex.settings import DEFAULT_URL
 from .models import User, EmailVerificationToken
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 def signup(request):
     if request.method == 'POST':
@@ -96,3 +99,8 @@ def email_verification(request, uidb64, token):
         message = "Invalid token!"
         token_obj.delete()
         return render(request, 'auth/emailverified.tpl.html', {'message' : message})
+    
+def send_mail(user, subject, message):
+    email = user.email
+    email = EmailMessage(subject, message, to=[email])
+    email.send()
