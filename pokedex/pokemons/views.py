@@ -56,7 +56,7 @@ def purchasepokemon(request):
                 profile.coins -= pokemon.price
                 profile.pokemons.add(pokemon)
                 profile.save()
-                RecentActivity.objects.create(user=request.user, activity_type=f'Purchase Pokemon - {pokemon.name}, {pokemon.price}$')
+                RecentActivity.objects.create(user=request.user, activity_type=f'Purchase Pokemon - {pokemon.name}, {pokemon.price}🪙')
                 success_message = f'You bought {pokemon.name}!'
                 messages.error(request, success_message)
                 return redirect('/profile')
@@ -82,7 +82,7 @@ def sellpokemon(request):
                 profile.coins += pokemon.price // 2
                 profile.save()
                 RecentActivity.objects.create(user=request.user, activity_type=f'Sold Pokemon - {pokemon.name}')
-                success_message = f'You sold {pokemon.name} for {pokemon.price // 2}$!'
+                success_message = f'You sold {pokemon.name} for {pokemon.price // 2}🪙!'
                 messages.success(request, success_message)
             else:
                 error_message = f'You dont have {pokemon.name}.'

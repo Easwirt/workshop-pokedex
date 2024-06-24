@@ -1,6 +1,5 @@
 from django.utils import timezone
 from datetime import timedelta
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def give_daily_reward(profile):
     now = timezone.now()

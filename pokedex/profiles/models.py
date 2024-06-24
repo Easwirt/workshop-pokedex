@@ -15,7 +15,7 @@ class Profile(models.Model):
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
     friends_request = models.ManyToManyField(User, related_name='friends_request', blank=True)
     privacy = models.IntegerField(default=0)
-
+    boss = models.IntegerField(default=1)
 
     def __str__(self):
         return self.user.username

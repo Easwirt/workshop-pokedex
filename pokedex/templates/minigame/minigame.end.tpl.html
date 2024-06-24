@@ -1,0 +1,39 @@
+{% extends 'home/base.tpl.html' %}
+
+{% block title %} Game {% endblock title %}
+
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+<style>
+    .centered-text {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.6rem;
+        text-align: center;
+        margin-top: 10%;
+        line-height: 1.6;
+        margin-left: 100px;
+        margin-right: 100px;
+    }
+
+    .btn-back {
+        display: block;
+        margin-top: 20px;
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+
+<div class="centered-text">
+    <h1>CONGRATULATIONS</h1>
+    <p>
+        As we near the end of this thrilling journey, what an amazing time it has been battling formidable bosses and overcoming challenges alongside our loyal Pokémon friends. We've experienced so much — from intense battles to incredible victories.
+
+        Each battle tested our skills and friendship. Our Pokémon not only aided us in combat but also became true companions on this adventure. Thank you to each of them for their loyalty and dedication!
+        
+        Now, as this adventure draws to a close, may luck always be on your side, my friends. Remember, strong bonds of friendship and teamwork can conquer any obstacle. May each new day bring you joy and success in your future endeavors.
+    </p>
+    <a class="btn btn-primary btn-lg btn-back" href="{% url 'my-profile' %}">Back</a>
+</div>
+
+{% endblock content %}

@@ -5,7 +5,7 @@ const ws_status = new WebSocket(ws_url);
 ws_status.onopen = function (e){
     console.log('connected');
         try {
-            const username = getUserName(); // Assuming this function gets the current username
+            const username = getUserName();
             ws_status.send(JSON.stringify({
                 'username': username,
                 'status': 'online'

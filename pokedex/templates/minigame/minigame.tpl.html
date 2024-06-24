@@ -1,0 +1,222 @@
+{% extends "home/base.tpl.html" %}
+{% load static %}
+
+{% block title %} Game {% endblock title %}
+
+{% block head %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Short+Stack">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+        overflow-x:hidden;
+    }
+
+    h2, h3 {
+        font-family: 'Short Stack', cursive;
+        color: #333;
+    }
+
+    p {
+        font-size: 1.1em;
+        line-height: 1.6;
+        color: #555;
+    }
+
+    .row {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+
+    .shake {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        30% { transform: translate(3px, 2px) rotate(0deg); }
+        40% { transform: translate(1px, -1px) rotate(1deg); }
+        50% { transform: translate(-1px, 2px) rotate(-1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        70% { transform: translate(3px, 1px) rotate(-1deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        90% { transform: translate(1px, 2px) rotate(0deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+
+    .appear {
+        animation: appear 0.3s ease-in-out;
+    }
+
+    @keyframes appear {
+        0% { opacity: 0; transform: scale(0.1); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    .actionWord {
+        position: absolute;
+        z-index: 1;
+        font-family: 'Short Stack', sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        color: white;
+        border-radius: 50%;
+        text-shadow: 
+            1px 1px 0 #EE204D,
+            -1px -1px 0 #EE204D,
+            -1px 1px 0 #EE204D,
+            1px -1px 0 #EE204D,
+            1px 0 0 #EE204D,
+            -1px 0 0 #EE204D,
+            0 1px 0 #EE204D,
+            0 -1px 0 #EE204D;
+    }
+
+    .boss-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .progress-bar {
+        font-family: "Bebas Neue", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-text {
+        font-size: 24px;
+    }
+    
+    .hidden {
+        display: none;
+    }
+
+    .visible {
+        display: block;
+    }
+
+
+</style>
+{% endblock head %}
+
+{% block content %}
+<input type="hidden" id="fightId" value="{{ fight.id }}">
+
+<div id="section1" class="row mt-5" style="margin-left: -15px; margin-right: -15px; justify-content: center; align-items: center; display: flex;">
+    <div class="col-md-6 text-left ml-c">
+        {% if boss.difficulty == "Easy" %}
+            <h1 class="text-success">DIFFICULTY: EASY</h1>
+        {% elif boss.difficulty == "Medium" %}
+            <h1 class="text-warning">DIFFICULTY: MEDIUM</h1>
+        {% elif boss.difficulty == "Hard" %}
+            <h1 class="text-danger">DIFFICULTY: HARD</h1>
+        {% endif %}
+        <h2>BOSS NAME: {{ boss.name }} 🎯</h2>
+        <h2>TIME TO KILL BOSS: {{ boss.duration }} ⏳</h2>
+        <h2>BOSS HP: {{ boss.health }} ❤️</h2>
+        <h2>HP REGEN: {{ boss.health_regen }} 💚</h2>
+        <h2>REWARD: {{ boss.reward }} 🪙, PENALTY: {{ boss.defeat_penalty }} 🪙</h2>
+        <div class="buttons-section">
+            <a id="playButton" class="btn btn-danger btn-lg">Play</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'my-profile' %}">Back</a>
+        </div>
+    </div>
+    <div class="col-md-6 text-center">
+        <div class="boss-image-container" style="position: relative;">
+            <img src="{% static boss.image.url %}" alt="Boss Image" style="width: 785px; height: 720px;" class="boss-image">
+        </div>
+    </div>
+</div>
+
+
+<!-- (2) -->
+<div id="section2" class="row mt-5" style="margin-left: -15px; margin-right: -15px; display: none;">
+    <div class="col-md-4">
+        <h2>GUIDE</h2>
+        <p>{{ boss.story }}</p>
+    </div>
+    <div class="col-md-4 text-center">
+        <h2>{{ boss.name }} 🎯</h2>
+        <div class="boss-image-container" style="position: relative;">
+            <img id="pokemonImage" src="{% static boss.image.url %}" alt="Boss Image" style="width: 785px; height: 680px;" class="boss-image">
+            <div id="actionSplashes" class="position-relative"></div>
+        </div>
+        <div class="progress mt-5">
+            <div class="progress-bar" role="progressbar" style="width: 100%; background-color: red;" aria-valuemin="0" aria-valuemax="{{ boss.health }}">
+                <span class="progress-text">{{ boss.health }}/{{ boss.health }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col">
+                <h3>TIME</h3>
+                <p id="killTime"></p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <h3>DURATION TO KILL BOSS</h3>
+                <p id="killDuration">{{ boss.duration }}⏳</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <h3>HEALTH REGENERATION</h3>
+                <p id="healthRegen">{{ boss.health_regen }} 💚</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <h3>REWARD FOR KILLING</h3>
+                <p id="reward">{{ boss.reward }} 🪙</p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <h3>DEFEAT PENALTY</h3>
+                <p id="reward">{{ boss.defeat_penalty }} 🪙</p>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5" style="margin-left: -15px; margin-right: -15px;">
+        <div class="col">
+            <h2>ABOUT GAMEPLAY</h2>
+            <p>
+                In this clicker game, your goal is to defeat a boss by clicking on it within a specified time limit. If you manage to defeat the boss, you receive a reward; otherwise, you incur a penalty.
+                The boss regenerates health over time, and your damage output depends on your Pokémon. Each Pokémon contributes damage based on its cost.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<!-- (3) -->
+<div id="section3" class="row mt-5" style="margin-left: -15px; margin-right: -15px; justify-content: center; align-items: center; display: none;">
+    <div id="defeatText" style="display: none; width: 100%;">
+        <h2 class="defeat-text">{{ boss.defeat_text }}</h2>
+        <center><h3>You lost :(</h3>
+        <h3>PENALTY: {{ boss.defeat_penalty }}</h3>
+        <a class="btn btn-primary btn-lg" href="{% url 'my-profile' %}">Back</a></center>
+    </div>
+    <div id="victoryText" style="display: none; width: 100%; margin-top: auto;">
+        <h2 class="victory-text">{{ boss.victory_text }}</h2>
+        <center><h3>You won :)</h3>
+        <h3>REWARD: {{ boss.reward }}</h3>
+        <a class="btn btn-success btn-lg" href="{% url 'my-profile' %}">Back</a></center>
+    </div>
+</div>
+<script src="{% static 'js/miniGame.js' %}"></script>
+{% endblock content %}

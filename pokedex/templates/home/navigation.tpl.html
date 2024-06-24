@@ -16,7 +16,12 @@
             {% include 'links/links.pokemons.html' %}
           {% endif %}
         </ul>
+        {% if request.user.is_authenticated %}
+          {% if not request.path == '/game/' %}
+            <a href="{% url 'minigame' %}"><li class="btn btn-danger me-2">Play</li></a>
+          {% endif %}
         {% include "home/incomemessages.tpl.html" %}
+        {% endif %}
       </div>
     </div>
   </nav>

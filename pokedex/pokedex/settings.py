@@ -36,10 +36,16 @@ INSTALLED_APPS = [
     'pokemons',
     'achievements',
     'profiles',
+    'minigame',
 ]
 
 ASGI_APPLICATION = 'pokedex.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 
 MIDDLEWARE = [
