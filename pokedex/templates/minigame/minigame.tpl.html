@@ -163,7 +163,7 @@
         <div class="row">
             <div class="col">
                 <h3>TIME</h3>
-                <p id="killTime"></p>
+                <p id="killTime">{{ boss.duration }}⏳</p>
             </div>
         </div>
         <div class="row mt-3">
@@ -205,17 +205,21 @@
 
 <!-- (3) -->
 <div id="section3" class="row mt-5" style="margin-left: -15px; margin-right: -15px; justify-content: center; align-items: center; display: none;">
-    <div id="defeatText" style="display: none; width: 100%;">
+    <div id="defeatText" style="display: none; width: 100%; flex-direction: column; align-items: center;">
         <h2 class="defeat-text">{{ boss.defeat_text }}</h2>
-        <center><h3>You lost :(</h3>
-        <h3>PENALTY: {{ boss.defeat_penalty }}</h3>
-        <a class="btn btn-primary btn-lg" href="{% url 'my-profile' %}">Back</a></center>
+        <center>
+            <h3>You lost :(</h3>
+            <h3>PENALTY: {{ boss.defeat_penalty }} 🪙</h3>
+            <a class="btn btn-primary btn-lg" href="{% url 'my-profile' %}">Back</a>
+        </center>
     </div>
-    <div id="victoryText" style="display: none; width: 100%; margin-top: auto;">
+    <div id="victoryText" style="display: none; width: 100%; flex-direction: column; align-items: center;">
         <h2 class="victory-text">{{ boss.victory_text }}</h2>
-        <center><h3>You won :)</h3>
-        <h3>REWARD: {{ boss.reward }}</h3>
-        <a class="btn btn-success btn-lg" href="{% url 'my-profile' %}">Back</a></center>
+        <center>
+            <h3>You won :)</h3>
+            <h3>REWARD: {{ boss.reward }} 🪙</h3>
+            <a class="btn btn-success btn-lg" href="{% url 'my-profile' %}">Back</a>
+        </center>
     </div>
 </div>
 <script src="{% static 'js/miniGame.js' %}"></script>

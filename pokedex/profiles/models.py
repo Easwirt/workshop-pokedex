@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from achievements.models import Achievement, UserAchievement
 from users.models import User
+from django.db.models import Sum
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -17,6 +18,12 @@ class Profile(models.Model):
     privacy = models.IntegerField(default=0)
     boss = models.IntegerField(default=1)
 
+
+    @property
+    def attack_damage(self):
+        total_attack = self.pokemons.aggregate(total_attack=Sum('attack'))['total_attack']
+        return total_attack if total_attack else 0
+    
     def __str__(self):
         return self.user.username
     

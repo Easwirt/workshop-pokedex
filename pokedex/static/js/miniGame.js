@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const section3 = document.getElementById('section3');
     const playButton = document.getElementById('playButton');
 
-    const timeElement = document.getElementById('killTime')
+    const timeElement = document.getElementById('killTime');
     let clickCount = 0;
 
     const healthRegenElement = document.getElementById('healthRegen');
@@ -24,32 +24,45 @@ document.addEventListener('DOMContentLoaded', function() {
         const clicks = data.clicks;
         const health = data.health;
         const status = data.status;
+        const time = data.time;
     
-        console.log(`Received data: clicks=${clicks}, health=${health}, status=${status}`);
+        console.log(`Received data: clicks=${clicks}, health=${health}, status=${status}, time=${time}`);
     
         progressBar.style.width = `${(health / maxHealth) * 100}%`;
         progressBar.setAttribute('aria-valuenow', health);
         progressBar.querySelector('.progress-text').textContent = `${health}/${maxHealth} ❤️`;
-    
+
+        timeElement.textContent = `${time}⏳`;
 
         if (status === 0) {
             section2.style.display = 'none';
             section3.style.display = 'block';
             const defeatText = document.getElementById('defeatText');
-            victoryText.style.display = 'flex';
+            defeatText.style.display = 'flex';
+            clearInterval(timer);
         } else if (status === 2 || health <= 0) {
             section2.style.display = 'none';
             section3.style.display = 'block';
-            const victoryText = document.getElementById('victoryText')
+            const victoryText = document.getElementById('victoryText');
             victoryText.style.display = 'flex';
+            clearInterval(timer);
         }
-
     };
 
     playButton.addEventListener('click', function() {
         section1.style.display = 'none';
         section2.style.display = 'flex';
+        startTimer();
     });
+
+
+    function startTimer() {
+        timer = setInterval(() => {
+            socket.send(JSON.stringify({
+                'action': 'second'
+            }));
+        }, 1000);
+    }
 
     function shakePokemonImage() {
         pokemonImage.classList.add('shake');

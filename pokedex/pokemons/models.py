@@ -44,6 +44,7 @@ class Pokemon(models.Model):
     generation = models.IntegerField()
     is_legendary = models.BooleanField()
     price = models.IntegerField(default=100)
+    attack = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

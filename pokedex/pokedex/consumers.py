@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from minigame.models import Fight
 from asgiref.sync import sync_to_async
 import time
-# from channels.db import database_sync_to_async
+from channels.db import database_sync_to_async
 
 def get_user():
     return get_user_model()
@@ -74,19 +74,18 @@ class FightConsumer(AsyncWebsocketConsumer):
 
         if action == 'click':
             await self.update_fight_state()
+        elif action == 'second':
+            await self.update_time()
 
     async def update_fight_state(self):
         fight = await self.get_fight_object()
         fight.clicks += 1
-        fight.health -= 2
+        fight.health -= fight.attack_damage
         
         if fight.health <= 0:
             fight.status = 2
             await fight.victory()
 
-        elif fight.time == 0:
-            fight.status = 0
-            await fight.lose()
 
         await sync_to_async(fight.save)()
 
@@ -98,27 +97,43 @@ class FightConsumer(AsyncWebsocketConsumer):
                     'clicks': fight.clicks,
                     'health': fight.health,
                     'status': fight.status,
+                    'time': fight.time,
                 }
             }
         )
 
+    async def update_time(self):
+        fight = await self.get_fight_object()
+        fight.time -= 1
+        
+        if fight.health < fight.max_health:
+            fight.health += fight.health_regen
+            if fight.health > fight.max_health:
+                fight.health = fight.max_health
 
-    # async def periodic_update(self):
-    #     while True:
-    #         await asyncio.sleep(1)
-    #         fight = await self.get_fight_object()
-    #         if fight.status in [0, 2]:
-    #             break
-    #         fight.health = min(fight.max_health, fight.health + 1)
-    #         fight.time -= 1
+        if fight.status == 0 or fight.status == 2:
+            self.running = False
 
-    #         if fight.time <= 0:
-    #             fight.status = 0
-    #             await fight.lose()
 
-    #         await database_sync_to_async(fight.save)()
+        if fight.time <= 0:
+            fight.status = 0
+            await fight.lose()
+        
 
-    #         await self.send_fight_state(fight)
+        await sync_to_async(fight.save)()
+
+        await self.channel_layer.group_send(
+            self.fight_group_name,
+            {
+                'type': 'fight_update',
+                'fight_state': {
+                    'clicks': fight.clicks,
+                    'health': fight.health,
+                    'status': fight.status,
+                    'time': fight.time,
+                }
+            }
+        )
     
     async def fight_update(self, event):
         fight_state = event['fight_state']
@@ -127,7 +142,7 @@ class FightConsumer(AsyncWebsocketConsumer):
             'clicks': fight_state['clicks'],
             'health': fight_state['health'],
             'status': fight_state['status'],
-
+            'time': fight_state['time']
         }))
 
     @sync_to_async

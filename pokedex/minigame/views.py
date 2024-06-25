@@ -6,7 +6,7 @@ def minigame(request):
     user = request.user
     profile = user.profile
 
-    boss_number = 1# profile.boss
+    boss_number = profile.boss
     boss = Boss.objects.filter(id=boss_number).first()
 
     if boss is None:

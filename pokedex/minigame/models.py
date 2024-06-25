@@ -25,10 +25,14 @@ class Fight(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     boss = models.ForeignKey(Boss, on_delete=models.CASCADE)
     status = models.IntegerField(default=1) # 1 - game, 0 - lose, 2 - victory
+    max_health = models.IntegerField(default=0)
     health = models.IntegerField(default=0)
+    health_regen = models.IntegerField(default=0)
     clicks = models.IntegerField(default=0)
     time = models.IntegerField(default=0)
     fight_done = models.BooleanField(default=False)
+    attack_damage = models.IntegerField(default=0)
+
 
     async def victory(self):
         if not self.fight_done:
@@ -45,8 +49,9 @@ class Fight(models.Model):
     async def lose(self):
         if not self.fight_done:
             profile = await sync_to_async(lambda: self.profile)()
+            boss = await sync_to_async(lambda: self.boss)()
 
-            if profile:
+            if profile and boss:
                 profile.coins -= self.boss.defeat_penalty
                 await sync_to_async(lambda: profile.save())()
                 self.fight_done = True
@@ -61,7 +66,11 @@ class Fight(models.Model):
 
 @receiver(post_save, sender=Fight)
 def fight_activate(sender, instance, created, **kwargs):
+
     if created:
         instance.health = instance.boss.health
         instance.time = instance.boss.duration
+        instance.max_health = instance.boss.health
+        instance.health_regen = instance.boss.health_regen
+        instance.attack_damage = instance.profile.attack_damage + 1
         instance.save()
