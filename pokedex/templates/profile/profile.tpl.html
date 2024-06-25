@@ -12,7 +12,10 @@
         <div class="card">
             <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
             <div class="card-body">
-                <h5 class="card-title">{{ profile.user.username }}</h5>
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title">{{ profile.user.username }}</h5>
+                    <h5 class="card-title">Joined: {{ profile.user.date_joined|date:"d/m/Y" }}</h5>
+                </div>
                 <p class="card-text small text-primary">{{ profile.coins }} 🪙</p>
                 <p class="card-text small text-danger">{{ profile.attack_damage }} ⚔️</p>
 
