@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const online_Protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+
+
     const pokemonImage = document.getElementById('pokemonImage');
     const actionSplashes = document.getElementById('actionSplashes');
     const radius = 360;
@@ -17,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const healthRegenElement = document.getElementById('healthRegen');
 
     const fightId = document.getElementById('fightId').value;
-    const socket = new WebSocket(`ws://${window.location.host}/ws/fight/${fightId}/`);
+    const socket = new WebSocket(`${online_Protocol}${window.location.host}/ws/fight/${fightId}/`);
 
     socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
