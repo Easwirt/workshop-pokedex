@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import Boss, Fight
-from users.models import User
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='/auth/signin/')
 def minigame(request):
     user = request.user
     profile = user.profile
