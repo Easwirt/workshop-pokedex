@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'achievements',
     'profiles',
     'minigame',
+    'trades',
 ]
 
 ASGI_APPLICATION = 'pokedex.asgi.application'
