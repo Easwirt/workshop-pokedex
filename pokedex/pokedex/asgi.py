@@ -1,5 +1,11 @@
 import os
 import django
+
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pokedex.settings')
+
+django.setup()
+
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
@@ -7,10 +13,7 @@ from . import routing
 from django.contrib.auth import get_user_model
 from asgiref.sync import sync_to_async
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pokedex.settings')
 
-django_asgi_app = get_asgi_application()
-django.setup()
 
 User = get_user_model()
 
@@ -24,6 +27,7 @@ class Protocol(ProtocolTypeRouter):
         return await super().__call__(scope, receive, send)
 
 
+django_asgi_app = get_asgi_application()
 
 application = Protocol({
     'http': django_asgi_app,
