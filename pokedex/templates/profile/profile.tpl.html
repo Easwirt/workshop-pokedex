@@ -43,6 +43,7 @@
                     {% else %}
                         <div class="d-flex justify-content-between">
                             <button id="Remove-from-friend-btn" class="btn btn-warning">Remove from friends</button>
+                            <button id="Trade-btn" class="btn btn-secondary">Trade</button>
                         </div>
                     {% endif %}
                 {% endif %}
@@ -233,7 +234,29 @@
         <h2>User profile is private.</h2>
         <button id="Add-to-friend-btn" class="btn btn-warning">Add to friends</button>
     </div>
+
+
     {% endif %}
+
+    <div id="tradesModal" class="modal">
+    <div class="modal-content">
+        <span id="close">&times;</span>
+        <div class="modal-body">
+            <h2>Trades</h2>
+            <div class="row" style="flex-direction: column">
+                <div>
+                    <h5>Your pokemons</h5>
+                    <div class="row" id="userPokemonsList"></div>
+                </div>
+                <div>
+                    <h5>Friends pokemons</h5>
+                    <div class="row" id="friendsPokemonsList"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
     var defaultURL = "{{ defaultURL }}"
     var userName = "{{ profile.user.username }}";
@@ -252,4 +275,5 @@
 <script src="{% static 'js/addToFriend.js' %}"></script>
 <script src="{% static 'js/incomeMessage.js' %}"></script>
 <script src="{% static 'js/slider.js' %}"></script>
+<script src="{% static 'js/trades.js' %}"></script>
 {% endblock content %}

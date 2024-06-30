@@ -9,4 +9,5 @@ urlpatterns = [
     path('profile/', include('profiles.urls')),
     path('pokemons/', include('pokemons.urls')),
     path('game/', include('minigame.urls')),
+    path('trades/', include('trades.urls')),
 ]
