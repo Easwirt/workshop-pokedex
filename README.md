@@ -31,8 +31,6 @@ Features of Pokedex:
     
 More information about this project at all you can find on repo from we forked.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 ### Built With
@@ -41,7 +39,6 @@ More information about this project at all you can find on repo from we forked.
 * [![Django][Django]][Django-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
