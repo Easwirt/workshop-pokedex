@@ -24,10 +24,14 @@
 Pokedex is a unique social network for all Pokémon lovers.
 Features of Pokedex:
 
-    Add Friends: Connect with other Pokémon trainers and share your adventures and achievements.
-    Mini-Game with Storyline: Immerse yourself in an engaging mini-game with a captivating storyline where you must defeat various bosses to progress.
-    Trades: Trade Pokémon with other users to expand your collection and strengthen your team.
-    Vast Pokémon Collection: Discover and collect a wide variety of Pokémon from different regions.
+
+
+    User Registration and Authentication: Registration system with email confirmation.
+    User Profile: Each user has their own profile where they can edit and add information about themselves.
+    Buying and Selling Pokémon: Capability to buy and sell Pokémon, expanding one's collection.
+    Adding Friends: Users can add other users as friends, follow their activity, and exchange Pokémon.
+    Clicker Mini-Game: Implemented a mini-game using websockets where users defeat bosses to earn rewards.
+    Pokémon Trading: Interactive feature for trading Pokémon, also implemented using websockets.
     
 More information about this project at all you can find on repo from we forked.
 
