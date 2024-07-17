@@ -120,7 +120,7 @@ def show_friends(request):
             'username': friend.username,
             'avatar': friend.profile.avatar,
         })
-
+    print(data)
     return JsonResponse({'friends': data})
 
 @login_required(login_url='/auth/signin/')

@@ -1,11 +1,22 @@
 document.addEventListener("DOMContentLoaded", function (){
-    var modal = document.getElementById('messageModal');
-    var messageBtn = document.getElementById('incomeMessages');
-    var span = document.getElementById('close');
-    var addFriendBtns = [];
-    var nameList = [];
-    var hide = [];
-    var declineFriendBtns = [];
+    let modal = document.getElementById('messageModal');
+    let messageBtn = document.getElementById('incomeMessages');
+    let span = document.getElementById('close');
+    let addFriendBtns = [];
+    let nameList = [];
+    let hide = [];
+    let declineFriendBtns = [];
+    let tradeModal = document.getElementById('tradesAcceptModal');
+    let closeTrade = document.getElementById('closeAcceptTrades');
+    let acceptUserPagesNumber
+    let acceptFriendsPagesNumber
+    let acceptUserPage = 0
+    let acceptFriendPage = 0
+    let acceptPagination = document.getElementById('acceptPagination')
+    let acceptFriendPagination = document.getElementById('acceptFriendPagination')
+    let acceptTradeBtn = document.getElementById('acceptButton')
+    let data
+    let acceptId
 
     if(messageBtn) {
         messageBtn.onclick = function (e) {
@@ -66,12 +77,65 @@ document.addEventListener("DOMContentLoaded", function (){
                     hide.push(listItem);
                 })
                 if(data.friends.length === 0){
-                    let empty = document.createElement('h3')
+                    let empty = document.createElement('h5')
                     empty.textContent = 'Empty'
                     friendsList.appendChild(empty)
                 }
                 click(nameList, hide);
                 decline(nameList, hide);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            fetch('/trades/showTrade/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Error fetching friends list');
+                }
+            })
+            .then(data => {
+                console.log("lox", data)
+                let requestList = document.getElementById("requestList")
+                requestList.innerHTML = ''
+                data.trades.forEach((trade, index) =>{
+                    let listItem = document.createElement('li')
+                    listItem.style.display = "block"
+                    listItem.style.margin = '10px'
+
+                    let avatarImg = document.createElement('img')
+                    avatarImg.src = getImgLink() + `${trade.sender_avatar}` + '.png'
+                    avatarImg.alt = `${trade.sender}'s avatar`
+                    avatarImg.style.width = '50px';
+                    avatarImg.style.height = '50px';
+                    avatarImg.style.marginRight = '5px';
+                    avatarImg.style.borderRadius = '50%'
+                    listItem.appendChild(avatarImg);
+
+                    let usernameSpan = document.createElement('span')
+                    usernameSpan.textContent = trade.sender
+                    usernameSpan.style.marginRight = '5px';
+                    listItem.appendChild(usernameSpan)
+
+                    let showBtn = document.createElement('button')
+                    showBtn.textContent = 'Show';
+                    showBtn.className = 'showBtn btn btn-success';
+                    showBtn.style.marginRight = '5px'
+                    showBtn.addEventListener("click", function(){
+                        showTrade(trade, index);
+                    })
+                    listItem.appendChild(showBtn);
+
+                    requestList.appendChild(listItem);
+                })
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -183,7 +247,139 @@ document.addEventListener("DOMContentLoaded", function (){
         }
         return cookieValue;
     }
+
+    closeTrade.onclick = function(){
+        tradeModal.style.display = "none";
+    }
+
+    function showTrade(trade, id){
+        acceptId = id
+        data = trade
+        tradeModal.style.display = "block";
+        let acceptUserPokemonList = document.getElementById('acceptUserPokemonsList')
+        let acceptFriendsPokemonsList = document.getElementById('acceptFriendsPokemonsList')
+
+        acceptUserPokemonList.innerHTML = ''
+        acceptFriendsPokemonsList.innerHTML = ''
+
+        acceptUserPagesNumber = Math.ceil(trade.pokemons_send.length / 12);
+        acceptFriendsPagesNumber = Math.ceil(trade.pokemons_received.length / 12);
+
+        setupPagination(acceptUserPagesNumber, acceptPagination, showPage);
+        setupPagination(acceptFriendsPagesNumber, acceptFriendPagination, showFriendPage);
+        showPage(trade, acceptUserPage)
+        showFriendPage(trade, acceptFriendPage)
+    }
+
+    function setupPagination(pagesNumber, paginationElement, showPageFunction) {
+        paginationElement.innerHTML = '';
+
+        if (pagesNumber > 1) {
+            let prevButton = document.createElement("li");
+            prevButton.className = "page-item";
+            let prevButtonLink = document.createElement("button");
+            prevButtonLink.innerText = "<";
+            prevButtonLink.className = "page-link mt-auto p-2";
+            prevButtonLink.onclick = function() {
+                if (acceptUserPage > 0) {
+                    acceptUserPage--;
+                    showPageFunction(receivedData, userPage);
+                }
+            };
+            prevButton.appendChild(prevButtonLink);
+            paginationElement.appendChild(prevButton);
+
+            let nextButton = document.createElement("li");
+            nextButton.className = "page-item";
+            let nextButtonLink = document.createElement("button");
+            nextButtonLink.innerText = ">";
+            nextButtonLink.className = "page-link mt-auto p-2";
+            nextButtonLink.onclick = function() {
+                if (acceptUserPage < pagesNumber - 1) {
+                    acceptUserPage++;
+                    showPageFunction(receivedData, userPage);
+                }
+            };
+            nextButton.appendChild(nextButtonLink);
+            paginationElement.appendChild(nextButton);
+        }
+    }
+
+    function showPage(data, page) {
+        let userPokemonsList = document.getElementById("acceptUserPokemonsList");
+        userPokemonsList.innerHTML = '';
+        for (let index = page * 12; index < data.pokemons_send.id.length && index < page * 12 + 12; index++) {
+            let id = data.pokemons_send.id[index];
+            let name = data.pokemons_send.name[index]
+            let listItem = createPokemonCard(id, name);
+            userPokemonsList.appendChild(listItem);
+        }
+    }
+
+    function showFriendPage(data, page) {
+        let friendPokemonsList = document.getElementById("acceptFriendsPokemonsList")
+        friendPokemonsList.innerHTML = '';
+
+        for (let index = page * 12; index < data.pokemons_received.id.length && index < page * 12 + 12; index++) {
+            let id = data.pokemons_received.id[index]
+            let name = data.pokemons_received.name[index]
+            let listItem = createPokemonCard(id, name);
+            friendPokemonsList.appendChild(listItem);
+        }
+    }
+
+    function createPokemonCard(id, name) {
+        let listItem = document.createElement('div');
+        listItem.className = "col-md-3 position-relative mb-3";
+
+        let card = document.createElement("div");
+        card.className = "card";
+        let cardbody = document.createElement("div");
+        cardbody.className = "card-body text-center";
+
+        let header = document.createElement("h5");
+        header.innerText = name;
+
+        let img = document.createElement("img");
+        img.src = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${id.toString().padStart(3, '0')}.png`;
+        img.title = name;
+        img.alt = name;
+        img.className = "text-bg-light";
+        img.style.width = "100px";
+        img.style.height = "100px";
+
+        cardbody.appendChild(header);
+        cardbody.appendChild(img);
+        card.appendChild(cardbody);
+        listItem.appendChild(card);
+        return listItem;
+    }
+
+    acceptTradeBtn.onclick = function(){
+        let acceptData = {
+            friend: data.sender,
+            id: acceptId
+        };
+        fetch('/trades/acceptTrade/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(acceptData)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Error fetching friends list');
+            }
+        })
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 })
-
-
-// btn btn-success / btn btn-danger ! income messages 0 - nixuya netu // search bar golovna storinka (rename searchbarpokemons), from last commit restore searchbarpokemons /

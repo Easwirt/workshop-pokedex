@@ -5,11 +5,38 @@
     <div class="modal-content">
         <span id="close">&times;</span>
         <div class="modal-body">
-            <h2>Income messages</h2>
+            <h3>Income messages</h3>
+            <h4>Friends requests</h4>
             <div class="avatar-options">
                     <ul id="friendsList"></ul>
             </div>
+            <h4>Trade requests</h4>
+            <div class="avatar-options">
+                <ul id="requestList"></ul>
         </div>
+
+        </div>
+    </div>
+
+</div>
+<div id="tradesAcceptModal" class="modal">
+    <div class="modal-content">
+        <span id="closeAcceptTrades" style="width: 100px; height: 100px">&times;</span>
+        <div class="modal-body">
+            <h2>Trade</h2>
+            <div style="display: flex; justify-content: space-between; gap: 20px">
+                <div style="width: 50%">
+                    <h5>Your send</h5>
+                    <div class="row" id="acceptUserPokemonsList"></div>
+                    <ul id="acceptPagination" class="pagination d-flex justify-content-center"></ul>
+                    <button id="acceptButton" class="btn btn-primary">Accept</button>
+                </div>
+                <div style="width: 50%">
+                    <h5>You recive</h5>
+                    <div class="row" id="acceptFriendsPokemonsList"></div>
+                    <ul id="acceptFriendPagination" class="pagination d-flex justify-content-center"></ul>
+                </div>
+            </div>
     </div>
 </div>
 <script src="{% static 'js/incomeMessage.js' %}"></script>

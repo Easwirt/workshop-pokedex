@@ -8,48 +8,48 @@
 <div class="container mt-4">
     <div class="row">
         <!-- Profile Sidebar -->
-    <div class="col-md-4">
-        <div class="card">
-            <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <h5 class="card-title">{{ profile.user.username }}</h5>
-                    <h5 class="card-title">Joined: {{ profile.user.date_joined|date:"d/m/Y" }}</h5>
-                </div>
-                <p class="card-text small text-primary">{{ profile.coins }} 🪙</p>
-                <p class="card-text small text-danger">{{ profile.attack_damage }} ⚔️</p>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ profile.user.username }}</h5>
+                        <h5 class="card-title">Joined: {{ profile.user.date_joined|date:"d/m/Y" }}</h5>
+                    </div>
+                    <p class="card-text small text-primary">{{ profile.coins }} 🪙</p>
+                    <p class="card-text small text-danger">{{ profile.attack_damage }} ⚔️</p>
 
-                <!-- Online Status Indicator -->
-                <div>
-                    <p id="user-status-{{ profile.user.username }}"></p>
-                </div>
+                    <!-- Online Status Indicator -->
+                    <div>
+                        <p id="user-status-{{ profile.user.username }}"></p>
+                    </div>
 
-                {% if profile.bio %}
-                <p class="card-text">{{ profile.bio }}</p>
-                {% endif %}
-                {% if change_permission %}
-                <div class="d-flex">
-                    <a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
-                    <form method="post" action="{% url 'daily-reward' %}" class="m-0 ms-1">
-                        {% csrf_token %}
-                        <button class="btn btn-success" type="submit">Daily Reward</button>
-                    </form>
-                </div>
-                {% else %}
-                    {% if request.user not in friends %}
-                        <div class="d-flex justify-content-between">
-                            <button id="Add-to-friend-btn" class="btn btn-warning">Add to friends</button>
-                        </div>
-                    {% else %}
-                        <div class="d-flex justify-content-between">
-                            <button id="Remove-from-friend-btn" class="btn btn-warning">Remove from friends</button>
-                            <button id="Trade-btn" class="btn btn-secondary">Trade</button>
-                        </div>
+                    {% if profile.bio %}
+                    <p class="card-text">{{ profile.bio }}</p>
                     {% endif %}
-                {% endif %}
+                    {% if change_permission %}
+                    <div class="d-flex">
+                        <a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit Profile</a>
+                        <form method="post" action="{% url 'daily-reward' %}" class="m-0 ms-1">
+                            {% csrf_token %}
+                            <button class="btn btn-success" type="submit">Daily Reward</button>
+                        </form>
+                    </div>
+                    {% else %}
+                        {% if request.user not in friends %}
+                            <div class="d-flex justify-content-between">
+                                <button id="Add-to-friend-btn" class="btn btn-warning">Add to friends</button>
+                            </div>
+                        {% else %}
+                            <div class="d-flex justify-content-between">
+                                <button id="Remove-from-friend-btn" class="btn btn-warning">Remove from friends</button>
+                                <button id="Trade-btn" class="btn btn-secondary">Trade</button>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
 
         <!-- Main Content -->
         <div class="col md-8 d-flex">
@@ -68,6 +68,8 @@
                             {% endif %}
                         </h5>
                     </div>
+
+                    <!-- Messages -->
                     <ul id="messages" style="display: none">
                         <li id="message"></li>
                     </ul>
@@ -78,6 +80,7 @@
                         {% endfor %}
                     </ul>
                     {% endif %}
+
                     {% if user_pokemons_paginacia.object_list %}
                         <div class="row">
                             {% for pokemon in user_pokemons_paginacia.object_list %}
@@ -217,46 +220,49 @@
         </div>
     </div>
 </div>
-    {% else %}
-    <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
-        <div class="col-md-3">
-            <div class="card">
-                <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
-                <div class="card-body">
-                    <h5 class="card-title">{{ profile.user.username }}</h5>
-    
-                    <div>
-                        <p id="user-status-{{ profile.user.username }}"></p>
-                    </div>
+
+{% else %}
+<div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
+    <div class="col-md-3">
+        <div class="card">
+            <img src="{% static 'avatars/' %}{{ profile.avatar }}.png" class="card-img-top" alt="Avatar">
+            <div class="card-body">
+                <h5 class="card-title">{{ profile.user.username }}</h5>
+
+                <div>
+                    <p id="user-status-{{ profile.user.username }}"></p>
                 </div>
             </div>
         </div>
-        <h2>User profile is private.</h2>
-        <button id="Add-to-friend-btn" class="btn btn-warning">Add to friends</button>
     </div>
+    <h2>User profile is private.</h2>
+    <button id="Add-to-friend-btn" class="btn btn-warning">Add to friends</button>
+</div>
+{% endif %}
 
-
-    {% endif %}
-
-    <div id="tradesModal" class="modal">
+<div id="tradesModal" class="modal">
     <div class="modal-content">
-        <span id="close">&times;</span>
+        <span id="closeTrades" style="width: 100px; height: 100px">&times;</span>
         <div class="modal-body">
             <h2>Trades</h2>
-            <div class="row" style="flex-direction: column">
-                <div>
+            <div style="display: flex; justify-content: space-between; gap: 20px">
+                <div style="width: 50%">
                     <h5>Your pokemons</h5>
+                    <h5 id="userCoins"></h5>
                     <div class="row" id="userPokemonsList"></div>
+                    <ul id="pagination" class="pagination d-flex justify-content-center"></ul>
+                    <button id="sendButton" class="btn btn-primary">Send</button>
                 </div>
-                <div>
-                    <h5>Friends pokemons</h5>
+                <div style="width: 50%">
+                    <h5>Friend pokemons</h5>
+                    <h5 id="friendCoins"></h5>
                     <div class="row" id="friendsPokemonsList"></div>
+                    <ul id="friendPagination" class="pagination d-flex justify-content-center"></ul>
                 </div>
             </div>
-
-        </div>
     </div>
 </div>
+
 <script>
     var defaultURL = "{{ defaultURL }}"
     var userName = "{{ profile.user.username }}";
