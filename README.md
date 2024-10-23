@@ -11,7 +11,7 @@
     <br />
     <a href="https://workshop-pokedex-django.onrender.com/">View Demo</a>
     <br />
-    Maded by <a href="https://github.com/Easwirt">Easwirt</a> & <a href="https://github.com/xterzxc">xterzxc</a>
+    Maded by <a href="https://github.com/Easwirt">Easwirt</a> & <a href="https://github.com/bdpwm">bdpwm</a>
   </p>
 </div>
 
